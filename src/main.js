@@ -9,6 +9,7 @@ import router from './router/index'
 import { AlertPlugin, ToastPlugin } from 'vux'
 import VueScroller from 'vue-scroller'
 import VueLazyload from 'vue-lazyload'
+import store from './store/index'
 
 Vue.use(AlertPlugin)
 Vue.use(ToastPlugin)
@@ -27,7 +28,9 @@ FastClick.attach(document.body)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
+const vue=new Vue({
+  store,
   router,
   render: h => h(App)
 }).$mount('#app-box')
+export default vue
