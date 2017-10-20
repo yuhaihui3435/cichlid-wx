@@ -1,74 +1,125 @@
 <template>
   <div>
-    <x-header :left-options="{showBack: false}"  :right-options="{showMore: true}" @on-click-more="showMenus = true" >知识库</x-header>
+    <x-header :left-options="{showBack: false}"   :right-options="{showMore: true}" @on-click-more="showMenus = true" style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">知识库</x-header>
 
 
-
+    <div style="padding-top: 46px">
     <search
       v-model="searchKey"
       position="absolute"
-      auto-scroll-to-top top="46px"
+      auto-scroll-to-top
       @on-focus="onFocus"
       @on-cancel="onCancel"
       @on-submit="onSubmit"
       ref="search"></search>
     <group>
-      <popup-picker title="选择属种" :data="szList" :columns="2" v-model="szVal" ref="szPicker" @on-change="sz_onChange" @on-shadow-change="sz_onShadowChange"></popup-picker>
+      <popup-picker title="选择属种" :data="szList" :columns="2" v-model="szVal" ref="szPicker" show-name @on-change="sz_onChange"></popup-picker>
     </group>
+    </div>
+    <scroller ref="kbList_scroller"
+              :on-refresh="refresh"
+              :on-infinite="infinite" style="top: 150px;" :height="'100%'"  >
+          <panel header="查询结果"  :list="kbList" :type="panelType" @on-img-error="onImgError" @on-click-item="queryKbView"></panel>
+    </scroller>
 
-    <panel header="查询结果"  :list="kbList" :type="panelType" @on-img-error="onImgError"></panel>
 
-
-
+    <div v-transfer-dom>
+      <actionsheet :menus="menus" v-model="showMenus" @on-click-menu-menu1="clearSearchAll"  @on-click-menu-menu2="clearSearchKey" @on-click-menu-menu3="clearSearchSpecies" show-cancel></actionsheet>
+    </div>
   </div>
 
 
 </template>
 <script>
-  import {XHeader,TransferDom,Selector,Group,PopupPicker,Search,Panel} from 'vux'
+  import Vue from 'vue'
+  import {XHeader,TransferDom,Selector,Group,PopupPicker,Search,Panel,Actionsheet} from 'vux'
+  import VueScroller from 'vue-scroller'
   import {mapState} from 'vuex'
+
+  Vue.use(VueScroller)
+
   export default {
-    computed: mapState([
-      'kbList',
-      'szList'
-    ]),
+    computed:{
+      ...mapState({
+                 'kbList':state=>state.kb.kbList,
+                 'szList':state=>state.kb.szList
+            })
+    } ,
     mounted: function () {
-      this.$store.dispatch('LOAD_KB_LIST',{})
+//      this.$refs.kbList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_SZ_LIST')
+      let csp= this.$store.state.currScrollerPosition;
+      console.info(csp)
+      if(csp.length!=0){
+        this.$refs.kbList_scroller&&this.$refs.kbList_scroller.scrollTo(csp.left,csp.top,false);
+        window.scrollTo(0, csp.top);
+      }
     },
     methods: {
       sz_onChange(val){
-        console.info(val)
+        if(val.length!=2){
+          return ;
+        }
+        let p={"knowledgebase.speciesId":val[1],search:this.searchKey}
+        this.$store.dispatch('LOAD_KB_LIST',p)
+      },
+      clearSearchAll(){
+        this.clearSearchKey();
+        this.clearSearchSpecies();
+      },
 
-        if(val.length==1){
-
-          this.$store.dispatch('LOAD_SZ_CHILDREN_LIST',{pId:val[0]});
+      clearSearchKey(){
+        this.searchKey=''
+      },
+      clearSearchSpecies(){
+        this.szVal=[]
+      },
+      refresh: function (done) {
+        let speciesId=''
+        if(this.szVal.length==2) {
+          speciesId= this.szVal[1];
         }
 
+        let p={"knowledgebase.speciesId":speciesId,search:this.searchKey}
+        this.$store.dispatch('LOAD_KB_LIST',p).then(()=>{
+          if(this.$refs.kbList_scroller!=undefined)
+          this.$refs.kbList_scroller.finishPullToRefresh();
+        }).catch((result)=>{
+          this.$refs.kbList_scroller&&this.$refs.kbList_scroller.finishPullToRefresh();})
       },
-      sz_onShadowChange(ids,names){
-//        ids.filter(id => id!=null)
-        ids.filter(function(id){
-          return !(!id);
-        })
-        console.info('ids:'+ids)
-        console.info('names:'+names)
-        if(ids.length==1){
-
-          this.$store.dispatch('LOAD_SZ_CHILDREN_LIST',{pId:ids[0]});
+      infinite: function (done) {
+        let speciesId=''
+        if(this.szVal.length==2) {
+          speciesId= this.szVal[1];
         }
+
+        let p={"knowledgebase.speciesId":speciesId,search:this.searchKey}
+        this.$store.dispatch('LOAD_MORE_KB_LIST',p).then(()=>{
+          this.$refs.kbList_scroller.finishInfinite(true);
+        }).catch((result)=>{this.$refs.kbList_scroller&&this.$refs.kbList_scroller.finishInfinite(true);})
       },
-      setFocus () {
-        this.$refs.search.setFocus()
+      //查看详细
+      queryKbView(item){
+        let currScrollerPosition=this.$refs.kbList_scroller.getPosition();//获取当前下拉的位置[]
+        this.$store.dispatch('SET_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
+        console.info(currScrollerPosition);
+        let id=item.dataId;
+        this.$router.push({ path: 'kb/'+id})
+        console.info("窗体Y轴位置:"+window.scrollY)
       },
+      //search 处理
       onSubmit () {
         console.log(this);
         this.$refs.search.setBlur()
-        this.$vux.toast.show({
-          type: 'text',
-          position: 'top',
-          text: 'on submit'
-        })
+        let speciesId=''
+        if(this.szVal.length==0)
+          speciesId=this.szVal[1];
+
+        let p={"knowledgebase.speciesId":speciesId,search:this.searchKey}
+        this.$store.dispatch('LOAD_KB_LIST',p)
+      },
+      setFocus () {
+        this.$refs.search.setFocus()
       },
       onFocus () {
         console.log('on focus')
@@ -89,17 +140,27 @@
       Group,
       Search,
       PopupPicker,
-      Panel
+      Panel,
+      Actionsheet,
+      VueScroller
     },
     data(){
       return {
         szVal:[],
         searchKey:'',
         showMenus: false,
-        panelType:'1'
+        panelType:'1',
+        menus:{
+          menu1: '清空全部查询条件',
+          menu2: '清空搜索查询条件',
+          menu3: '清空属种查询条件',
+        },
+        showMenus: false
       }
     }
+
   }
+
 </script>
 <style lang="less">
   @import '~vux/src/styles/1px.less';

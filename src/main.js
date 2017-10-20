@@ -6,14 +6,20 @@ import FastClick from 'fastclick'
 import App from './App'
 //import Home from './components/HelloFromVux'
 import router from './router/index'
-import { AlertPlugin, ToastPlugin } from 'vux'
-import VueScroller from 'vue-scroller'
+import { AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin } from 'vux'
+
 import VueLazyload from 'vue-lazyload'
 import store from './store/index'
+import { sync } from 'vuex-router-sync'
 
+
+
+Vue.use(ConfigPlugin, {
+  $layout: 'VIEW_BOX' // global config for VUX, since v2.5.12
+})
 Vue.use(AlertPlugin)
 Vue.use(ToastPlugin)
-Vue.use(VueScroller)
+Vue.use(WechatPlugin)
 
 Vue.use(VueLazyload,{
   preload:1.3,//预加载的宽高
@@ -23,9 +29,21 @@ Vue.use(VueLazyload,{
   listenEvents:['scroll','wheel','mousewheel','resize','animationend','transitionend','touchmove'], //你想让vue监听的事件
 })
 
+router.beforeEach((to, from, next) => {
+  /* 路由发生变化修改页面title */
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+  next();
+})
+
+require('es6-promise').polyfill()
+
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
+
+sync(store, router)
 
 /* eslint-disable no-new */
 const vue=new Vue({
@@ -33,4 +51,7 @@ const vue=new Vue({
   router,
   render: h => h(App)
 }).$mount('#app-box')
+
+
+
 export default vue
