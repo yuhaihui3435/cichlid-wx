@@ -22,7 +22,7 @@
   import {XHeader,TransferDom,Selector,Group,PopupPicker,Panel,Actionsheet} from 'vux'
   import VueScroller from 'vue-scroller'
   import {mapState} from 'vuex'
-
+  //文章
   Vue.use(VueScroller)
 
   export default {
@@ -33,6 +33,22 @@
     mounted: function () {
       //this.$refs.artList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_ARTCATALOG_LIST')
+    },
+    activated:function () {
+      let csp= this.$store.state.art.currScrollerPosition;
+      console.info(csp)
+      if(csp.length!=0){
+
+        setTimeout(() => {
+          this.$refs.artList_scroller&&this.$refs.artList_scroller.scrollTo(csp.left,csp.top,false);
+        }, 30)
+
+      }
+    },
+    deactivated:function () {
+      let currScrollerPosition=this.$refs.artList_scroller.getPosition();//获取当前下拉的位置[]
+      this.$store.dispatch('SET_ART_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
+      console.info(currScrollerPosition);
     },
     methods: {
       artCatalog_onChange(val){

@@ -1,8 +1,10 @@
 <template>
   <div id="app" style="height:100%;">
     <view-box ref="viewBox"  body-padding-bottom="55px" >
-    <router-view class="router-view"></router-view>
-
+      <keep-alive>
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </view-box>
     <tabbar slot="bottom">
       <tabbar-item link="/"  @on-item-click="tabbarItemClickHandler('/')" :selected="route.path === '/'">
@@ -54,7 +56,7 @@ export default {
   methods:{
     tabbarItemClickHandler(path){
       console.info(this.$store)
-      this.$store.dispatch('SET_CURRSCROLLERPOSITION',[]);//设置当前滚动条的位置
+
     }
   },
   components: {

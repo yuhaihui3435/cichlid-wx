@@ -5,12 +5,16 @@
 
     </div>
   </div>
+
 </template>
 <script>
 
-  import { XHeader } from 'vux'
+  import {XHeader } from 'vux'
   import {mapState} from 'vuex'
   export default {
+    directives: {
+
+    },
     computed: {...mapState({
       'art_view_headerTitle':state=>state.art.art_view_headerTitle,
       'art_view_detail':state=>state.art.art_view_detail
@@ -23,9 +27,6 @@
       })
     },
     methods: {
-
-    },
-    directives: {
 
     },
     components: {

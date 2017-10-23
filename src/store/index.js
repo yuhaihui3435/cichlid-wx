@@ -16,23 +16,19 @@ const store = new Vuex.Store({
     art:artModule
   },
   state:{
-    currScrollerPosition:[],
+
     data_loading:false,
     data_loading_txt:'数据加载中...',
     urlPrefix:'/api'
   },
   actions: {
-    SET_CURRSCROLLERPOSITION:({ commit,state },param)=>{
-      commit('SET_CURRSCROLLERPOSITION', param)
-    },
+
     SET_URLPREFIX:({ commit,state },param)=>{
       commit('SET_URLPREFIX', param)
     },
   },
   mutations: {
-    SET_CURRSCROLLERPOSITION:(state,param)=>{
-      state.currScrollerPosition=param
-    },
+
     SET_URLPREFIX:(state,param)=>{
       state.urlPrefix=param
     }

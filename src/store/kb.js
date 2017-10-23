@@ -11,7 +11,8 @@ export default{
     kb_view_headerTitle:'',
     kb_view_baseInfo_list:[],
     kb_view_detail:'',
-    kb_photoWall:''
+    kb_photoWall:'',
+    currScrollerPosition:[],
   },
   actions: {
     LOAD_KB_LIST: function ({ commit,state },param) {
@@ -73,7 +74,10 @@ export default{
         state.data_loading=false;
         kit.showMsg("系统出错了");
       })
-    }
+    },
+    SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{
+      commit('SET_KB_CURRSCROLLERPOSITION', param)
+    },
   },
   mutations: {
     ADD_KB_LIST: (state, { list }) => {
@@ -176,7 +180,10 @@ export default{
         state._szList.push(sz)
       }
       state.data_loading=false;
-    }
+    },
+    SET_KB_CURRSCROLLERPOSITION:(state,param)=>{
+      state.currScrollerPosition=param
+    },
   },
   getters: {
     getKbList: state => {

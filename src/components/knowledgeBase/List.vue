@@ -48,12 +48,22 @@
     mounted: function () {
 //      this.$refs.kbList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_SZ_LIST')
-      let csp= this.$store.state.currScrollerPosition;
+    },
+    activated:function () {
+      let csp= this.$store.state.kb.currScrollerPosition;
       console.info(csp)
       if(csp.length!=0){
-        this.$refs.kbList_scroller&&this.$refs.kbList_scroller.scrollTo(csp.left,csp.top,false);
-        window.scrollTo(0, csp.top);
+
+          setTimeout(() => {
+            this.$refs.kbList_scroller&&this.$refs.kbList_scroller.scrollTo(csp.left,csp.top,false);
+          }, 30)
+
       }
+    },
+    deactivated:function () {
+      let currScrollerPosition=this.$refs.kbList_scroller.getPosition();//获取当前下拉的位置[]
+      this.$store.dispatch('SET_KB_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
+      console.info(currScrollerPosition);
     },
     methods: {
       sz_onChange(val){
@@ -100,12 +110,10 @@
       },
       //查看详细
       queryKbView(item){
-        let currScrollerPosition=this.$refs.kbList_scroller.getPosition();//获取当前下拉的位置[]
-        this.$store.dispatch('SET_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
-        console.info(currScrollerPosition);
+
         let id=item.dataId;
         this.$router.push({ path: 'kb/'+id})
-        console.info("窗体Y轴位置:"+window.scrollY)
+
       },
       //search 处理
       onSubmit () {

@@ -9,6 +9,7 @@ export default{
     artCatalogList:[],
     art_view_headerTitle:'',
     art_view_detail:'',
+    currScrollerPosition:[],
   },
   actions: {
     LOAD_ART_LIST: function ({ commit,state },param) {
@@ -66,7 +67,10 @@ export default{
         state.data_loading=false;
         kit.showMsg("系统出错了");
       })
-    }
+    },
+    SET_ART_CURRSCROLLERPOSITION:({ commit,state },param)=>{
+      commit('SET_ART_CURRSCROLLERPOSITION', param)
+    },
   },
   mutations: {
     ADD_ART_LIST: (state, { list }) => {
@@ -131,7 +135,10 @@ export default{
         state.artCatalogList.push(ac)
       }
       state.data_loading=false;
-    }
+    },
+    SET_ART_CURRSCROLLERPOSITION:(state,param)=>{
+      state.currScrollerPosition=param
+    },
   },
   getters: {
     // getArtList: state => {
