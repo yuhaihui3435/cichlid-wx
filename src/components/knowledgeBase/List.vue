@@ -3,11 +3,11 @@
     <x-header :left-options="{showBack: false}"   :right-options="{showMore: true}" @on-click-more="showMenus = true" style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">知识库</x-header>
 
 
-    <div style="padding-top: 46px">
-    <search
+    <div style="padding-top: 46px;width: 100%">
+
+      <search
       v-model="searchKey"
-      position="absolute"
-      auto-scroll-to-top
+      :auto-fixed="false"
       @on-focus="onFocus"
       @on-cancel="onCancel"
       @on-submit="onSubmit"

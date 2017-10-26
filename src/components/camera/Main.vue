@@ -1,8 +1,8 @@
 <template>
   <div style="height: 200px;">
-      <div class="camera-icon">
-        <span class="cc-icon">&#xe727;</span>
-        <input  type="file" accept="image/*" style="display: none;">
+      <div class="camera-icon" @click.stop="addImg">
+        <span class="cc-icon" >&#xe727;</span>
+        <input ref="f"  type="file" accept="image/*" style="display: none;" @change="onFileChange"  multiple>
         <span >点击此处拍照</span>
       </div>
   </div>
@@ -21,7 +21,13 @@
 
     },
     methods: {
+      addImg:function (e) {
+        this.$refs.f.click();//打开照相机
+        return false;
+      },
+      onFileChange:function () {
 
+      },
     },
     directives: {
 
@@ -30,7 +36,11 @@
 
     },
     data() {
-      return {}
+      return {
+        imgData:[]
+
+
+      }
     }
   }
 </script>
@@ -41,7 +51,6 @@
   .camera-icon{
     width:100%;
     height:100px;
-
     text-align: center;
     display: block;
     background-color: white;
