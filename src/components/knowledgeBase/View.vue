@@ -18,9 +18,9 @@
     <div v-transfer-dom>
       <popup v-model="cameraPopupShow" height="100%">
         <div>
-            <camera></camera>
+            <camera ref="camera"></camera>
             <div style="width:100%;position: fixed;bottom: 0px">
-              <div style="text-align: right;float: left;width: 40%;"><span class="cc-icon" style="color:red;" @click="cameraPopupShow=false">&#xe620;</span></div>
+              <div style="text-align: right;float: left;width: 40%;"><span class="cc-icon" style="color:red;" @click="closeCamera()">&#xe620;</span></div>
               <div style="text-align: left;float: right;width: 40%"><span class="cc-icon" style="color:green;" @click="">&#xe627;</span></div>
             </div>
         </div>
@@ -65,8 +65,22 @@
         this.baseInfoShow=false;
         this.detailInfoShow=false;
         this.photoWallShow=true;
-      }
+      },
+      closeCamera(){
+        const vm=this;
+        this.$vux.confirm.show({
+          content:'确定要退出上传照片吗?',
+          // 组件除show外的属性
+          onCancel () {
 
+          },
+          onConfirm () {
+            vm.cameraPopupShow=false
+            console.info("执行了关闭照相机界面")
+            vm.$refs.camera.resetData();
+          }
+        })
+      }
     },
     directives: {
       TransferDom

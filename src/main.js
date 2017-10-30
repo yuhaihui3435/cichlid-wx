@@ -6,12 +6,12 @@ import FastClick from 'fastclick'
 import App from './App'
 //import Home from './components/HelloFromVux'
 import router from './router/index'
-import { AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin } from 'vux'
+import { AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin,ConfirmPlugin } from 'vux'
 
 import VueLazyload from 'vue-lazyload'
 import store from './store/index'
 import { sync } from 'vuex-router-sync'
-
+import vuePicturePreview from 'vue-picture-preview'
 
 
 Vue.use(ConfigPlugin, {
@@ -20,6 +20,8 @@ Vue.use(ConfigPlugin, {
 Vue.use(AlertPlugin)
 Vue.use(ToastPlugin)
 Vue.use(WechatPlugin)
+Vue.use(ConfirmPlugin)
+Vue.use(vuePicturePreview)
 
 Vue.use(VueLazyload,{
   preload:1.3,//预加载的宽高

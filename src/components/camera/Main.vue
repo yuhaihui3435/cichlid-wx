@@ -7,11 +7,14 @@
     </div>
     <ul  class="grid">
       <!-- 这种布局显示小图片和文字 -->
-      <li v-for="a in imgArray" :key="a.id">
-        <a><img :src="a.base64Str" /></a>
-        <span class="list-img-close" @click='delImage(a.id)'></span>
+      <li v-for="ia in imgArray" :key="ia.id">
+        <a @click='previewImage(ia.base64Str)'><img :src="ia.base64Str" v-preview="ia.base64Str" /></a>
+        <span class="list-img-close"  @click='delImage(ia.id)'>&#xe620;</span>
       </li>
     </ul>
+    <div class="preview"  v-show="isPreview" @click="closePreview">
+      <img :src="previewImg">
+    </div>
   </div>
 </template>
 
@@ -44,15 +47,20 @@
         this.$refs.f.click();//打开照相机
         return false;
       },
-      onFileChange: function () {
+      /**
+       *
+       * 响应图片选择事件
+       * */
+      onFileChange: function (event) {
 
-        if(imgNumber==imgMaxUploadCount){
+        // 获取当前选中的文件
+        const files = event.target.files;
+
+        if(this.imgArray.length>=imgMaxUploadCount||files.length>5){
           kit.showMsg("每次最多能上传"+imgMaxUploadCount+"张图片")
           return ;
         }
 
-        // 获取当前选中的文件
-        const files = event.target.files;
         // 检查文件类型
         for (var file of files) {
           if (['jpeg', 'png', 'gif', 'jpg'].indexOf(file.type.split("/")[1]) < 0) {
@@ -69,19 +77,15 @@
 
 
 
-          this.fileToDataURL(file,(DataUrl,vm)=>{
-              this.compressDataURL(DataUrl,{width:2.8,height:2.8},vm)
+          this.fileToDataURL(file,(DataUrl,vm,file)=>{
+              this.compressDataURL(DataUrl,vm,file)
           });
 
-
-
+          if(files.length==1)
+          event.target.value=null;
 
         }
-
-        console.info("通过检查，继续执行")
-
-
-
+        //console.info("通过检查，继续执行")
       },
 
       /**
@@ -94,7 +98,7 @@
         const reader = new window.FileReader();
         reader.onload = function (e) {
           //console.info(e.target.result);
-           callback(e.target.result,vm);
+           callback(e.target.result,vm,file);
 
         };
         reader.readAsDataURL(file);
@@ -107,59 +111,74 @@
        * @param ratio
        * @param callback
        */
-      compressDataURL: function (dataURL, ratio,vm) {
-        let orgSize=dataURL.length;
-        console.info("压缩前图片的size:"+orgSize);
-        if(orgSize<=compressSize) {
-          if(!vm.imgChecked(dataURL)) {
-            vm.$data.imgArray.push({id: getUuid(), base64Str: dataURL})
-            return;
-          }
-
-        }
+      compressDataURL: function (dataURL,vm,file) {
         const img = new window.Image();
         img.src = dataURL;
-        // onload
+        let orgSize=dataURL.length;
+        let uuid=getUuid();
+        let imgName=file.name;
+        //console.info(imgName);
+        //console.info("压缩前图片的size:"+orgSize);
+        if(vm.imgChecked(imgName)>-1) {
+          kit.showMsg("该图片已经选择。")
+          return ;
+        }
+        vm.checkArray.push(imgName);
+        if(orgSize<=compressSize) {
+          vm.$data.imgArray.push({id: uuid,name:imgName, base64Str: dataURL})
+          return;
+        }
+        // 图片压缩处理
         img.onload = function () {
+          //压缩的大小
+          var max_width = 1920;
+          var max_height = 1080;
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
-          canvas.width = 100 * ratio.width;
-          canvas.height = 100 * ratio.height;
-          const RATIO = canvas.width / canvas.height;
           let cutx = 0;
           let cuty = 0;
-          let cutw = img.width;
-          let cuth = img.height;
-          if (cutw / cuth > RATIO) {
-            // 宽超过比例了]]
-            let realw = cuth * RATIO;
-            cutx = (cutw - realw) / 2;
-            cutw = realw;
-          } else if (cutw / cuth < RATIO) {
-            // 长超过比例了]]
-            let realh = cutw / RATIO;
-            cuty = (cuth - realh) / 2;
-            cuth = realh;
+          let width = img.width;
+          let height = img.height;
+          if(width > height) {
+            if(width > max_width) {
+              height = Math.round(height *= max_width / width);
+              width = max_width;
+            }
+          }else{
+            if(height > max_height) {
+              width = Math.round(width *= max_height / height);
+              height = max_height;
+            }
           }
-          ctx.drawImage(img, cutx, cuty, cutw, cuth, 0, 0, canvas.width, canvas.height);
-          const ndata = canvas.toDataURL('image/jpeg', 1);
-          //callback(ndata);
-          console.info("执行了压缩处理，压缩后图片size："+ndata.length+"压缩率为:"+(((orgSize-ndata.length)/orgSize).toFixed(2))*100+"%")
-          console.info(vm.$data)
-          vm.$data.imgArray.push({id:getUuid(),base64Str:ndata})
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, cutx, cuty, width, height,);
+          let ndata = canvas.toDataURL('image/jpeg', 0.2);
+          //console.info("执行了压缩处理，压缩后图片size："+ndata.length+"压缩率为:"+(((orgSize-ndata.length)/orgSize).toFixed(2))*100+"%")
+          vm.$data.imgArray.push({id:getUuid(),name:imgName,base64Str:ndata})
         };
       },
+      /**
+       *
+       * 图片重复选择检查
+       *
+       * */
+      imgChecked:function (imgName) {
+        let vm=this;
+        return vm.checkArray.indexOf(imgName);
+      },
 
-      //检查图片是否已经选择
-      imgChecked:function (dataURL) {
-        for (var img of this.imgArray){
-          if(img.dataURL==dataURL) {
-            kit.showMsg("该图片已经被选择");
-            return true;
-          }
-          else
-            return false;
-        }
+
+      /**
+       *
+       *重置组件数据
+       *
+       * */
+      resetData:function () {
+
+        this.imgArray=[];
+        this.checkArray=[];
+        imgNumber=0;
       },
 
 
@@ -198,17 +217,65 @@
       },
 
 
-
+      /**
+       * 删除选择的图片
+       * @param id  图片id
+       */
       delImage:function (id) {
+        console.info(id)
+        const vm=this;
+        this.$vux.confirm.show({
+          content:'确定要删除吗?',
+          // 组件除show外的属性
+          onCancel () {
 
-      }
+          },
+          onConfirm () {
+            let index=0;
+            console.info(vm.imgArray)
+            for(let img of vm.imgArray){
+               if(img.id==id){
+                 vm.imgArray.splice(index,1);
+                 let j=vm.checkArray.indexOf(img['name'])
+                 vm.checkArray.splice(j,1)
+                 break;
+               }
+                index++;
+            }
+          }
+        })
+      },
+      /**
+       *
+       * 关闭浏览
+       *
+       */
+      closePreview :function () {
+        let vm = this;
+        this.isPreview=false;
+        this.previewImg='';
+      },
+      /**
+       * 预览图片
+       *
+       * @param url 图片base64 url
+       */
+      previewImage: function(url){
+        let vm = this;
+        vm.isPreview = true;
+        vm.previewImg = url;
+      },
+
     },
     directives: {},
     components: {Grid,GridItem, },
     data() {
       return {
-        imgArray:[],
-        layout:'grid'
+        imgArray:[],//图片xinxi
+        checkArray:[],//图片是否选择检查临时变量
+        layout:'grid',
+        isPreview:false,
+        previewImg:'',
       }
     }
   }
@@ -233,25 +300,47 @@
   ul.grid{
     list-style: none;
     width: 100%;
-    margin: 0 auto;
+    margin: 20px auto;
     text-align: left;
+
   }
 
   ul.grid li{
     padding: 1px;
     float:left;
-    cursor: pointer;
-    border:  1px solid #e8e8e8;
+    /*cursor: pointer;*/
+    border:  1px solid #DDE6E8;
     box-sizing: border-box;
+    width: 33.3%;
   }
 
   ul.grid li img{
-    width:49%;
-    height:280px;
+    width:100%;
+    height:120px;
     object-fit: cover;
     display:block;
     border:none;
-    padding: 10px;
+    padding: 2px;
     box-sizing: border-box;
   }
+  .list-img-close {
+    font-family: 'iconfont';
+    font-size:20px;
+    display: block;
+    /*top: 10px;*/
+    /*right: -10px;*/
+    position: relative;
+    color: red;
+    line-height: 20px;
+    text-align: center;
+    padding: 1px;
+  }
+  .preview {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    z-index: 0;
+    overflow:hidden; word-break:break-all; }
 </style>

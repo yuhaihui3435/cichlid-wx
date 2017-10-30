@@ -1,11 +1,14 @@
 <template>
   <div id="app" style="height:100%;">
+    <lg-preview></lg-preview>
     <view-box ref="viewBox"  body-padding-bottom="55px" >
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
+
     </view-box>
+
     <tabbar slot="bottom">
       <tabbar-item link="/"  @on-item-click="tabbarItemClickHandler('/')" :selected="route.path === '/'">
 
@@ -29,6 +32,7 @@
   import { Loading,  TransferDomDirective as TransferDom ,ViewBox ,Tabbar, TabbarItem,XHeader } from 'vux'
   import {mapState} from 'vuex'
   import TB from './TabBar'
+
 export default {
 
 
