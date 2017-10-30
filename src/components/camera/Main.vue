@@ -23,6 +23,7 @@
   import {Grid,GridItem } from 'vux'
   import {mapState} from 'vuex'
   import kit from '../../kit'
+  import EXIF from 'exif-js'
 
   const imgMaxUploadCount = 5;
   const imgMasSize = 1024 * 1024 * 5; // 10MB
@@ -75,8 +76,6 @@
             return;
           }
 
-
-
           this.fileToDataURL(file,(DataUrl,vm,file)=>{
               this.compressDataURL(DataUrl,vm,file)
           });
@@ -124,12 +123,14 @@
           return ;
         }
         vm.checkArray.push(imgName);
-        if(orgSize<=compressSize) {
-          vm.$data.imgArray.push({id: uuid,name:imgName, base64Str: dataURL})
-          return;
-        }
+
         // 图片压缩处理
         img.onload = function () {
+          let Orientation='';
+          EXIF.getData(file, function(){
+            Orientation = EXIF.getTag(file, 'Orientation');
+          });
+          console.info('图片方向:'+Orientation);
           //压缩的大小
           var max_width = 1920;
           var max_height = 1080;
@@ -153,11 +154,84 @@
           canvas.width = width;
           canvas.height = height;
           ctx.drawImage(img, cutx, cuty, width, height,);
-          let ndata = canvas.toDataURL('image/jpeg', 0.2);
+
+          //修复ios上传图片的时候 被旋转的问题
+          if(Orientation != "" && Orientation != 1){
+            switch(Orientation){
+              case 6://需要顺时针（向左）90度旋转
+                vm.rotateImg(img,'left',canvas);
+                break;
+              case 8://需要逆时针（向右）90度旋转
+                vm.rotateImg(img,'right',canvas);
+                break;
+              case 3://需要180度旋转
+                vm.rotateImg(img,'right',canvas);//转两次
+                vm.rotateImg(img,'right',canvas);
+                break;
+            }
+          }
+          let ndata='';
+          if(orgSize<=compressSize) {
+            ndata = canvas.toDataURL('image/jpeg', 0.95);
+          }else{
+            ndata = canvas.toDataURL('image/jpeg', 0.2);
+          }
+
           //console.info("执行了压缩处理，压缩后图片size："+ndata.length+"压缩率为:"+(((orgSize-ndata.length)/orgSize).toFixed(2))*100+"%")
           vm.$data.imgArray.push({id:getUuid(),name:imgName,base64Str:ndata})
         };
       },
+      /**
+       *
+       * 图片旋转，某些系统中可能会出现旋转情况
+       *
+       * */
+      rotateImg:function (img, direction,canvas) {//图片旋转
+        var min_step = 0;
+        var max_step = 3;
+        if (img == null)return;
+        var height = img.height;
+        var width = img.width;
+        var step = 2;
+        if (step == null) {
+          step = min_step;
+        }
+        if (direction == 'right') {
+          step++;
+          step > max_step && (step = min_step);
+        } else {
+          step--;
+          step < min_step && (step = max_step);
+        }
+        var degree = step * 90 * Math.PI / 180;
+        var ctx = canvas.getContext('2d');
+        switch (step) {
+          case 0:
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0);
+            break;
+          case 1:
+            canvas.width = height;
+            canvas.height = width;
+            ctx.rotate(degree);
+            ctx.drawImage(img, 0, -height);
+            break;
+          case 2:
+            canvas.width = width;
+            canvas.height = height;
+            ctx.rotate(degree);
+            ctx.drawImage(img, -width, -height);
+            break;
+          case 3:
+            canvas.width = height;
+            canvas.height = width;
+            ctx.rotate(degree);
+            ctx.drawImage(img, -width, 0);
+            break;
+        }
+      },
+
       /**
        *
        * 图片重复选择检查
