@@ -17,6 +17,7 @@
     "node-sass": "^4.5.3",
     "vue": "^2.2.2",
     "vue-lazyload": "^1.1.3",
+    "vue-picture-preview": "0.0.1",
     "vue-router": "^2.2.0",
     "vuet": "^1.0.1",
     "vuex": "^2.1.1",
