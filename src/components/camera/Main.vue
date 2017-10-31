@@ -480,7 +480,7 @@
 
             let percent = Math.round(evt.loaded / evt.total * 100) ;
 
-            vm.$ref[refStr][0].percent=percent;
+            vm.$ref[refStr][0].props['percent']=percent;
           }
         }
 
@@ -488,19 +488,20 @@
         xhr.send(fromData);
       },
       submitALL:function () {
-        if(this.imgArray.length==0){
+        let vm=this;
+        if(vm.imgArray.length==0){
           kit.showMsg("请选择图片")
           return ;
-        }else if(this.imgArray.length!=imgCount){
+        }else if(vm.imgArray.length!=imgCount){
           kit.showMsg("图片转换中，请稍后")
           return
         }else{
           console.info('循环处理结束')
-          this.gen=this.uploadGenerator(this.imgArray);
-          const firstUpload=this.gen.next();
+          vm.gen=vm.uploadGenerator(vm.imgArray);
+          const firstUpload=vm.gen.next();
 
           firstUpload.value.map((item)=>{
-            _this.compress(item, _this.processData);
+            vm.compress(item, _this.processData);
           });
 
 
