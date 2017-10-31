@@ -21,7 +21,7 @@
             <camera ref="camera"></camera>
             <div style="width:100%;position: fixed;bottom: 0px">
               <div style="text-align: right;float: left;width: 40%;"><span class="cc-icon" style="color:red;" @click="closeCamera()">&#xe620;</span></div>
-              <div style="text-align: left;float: right;width: 40%"><span class="cc-icon" style="color:green;" @click="">&#xe627;</span></div>
+              <div style="text-align: left;float: right;width: 40%"><span class="cc-icon" style="color:green;" @click="uploadImg()" >&#xe627;</span></div>
             </div>
         </div>
       </popup>
@@ -80,6 +80,10 @@
             vm.$refs.camera.resetData();
           }
         })
+      },
+      uploadImg(){
+        const vm=this;
+        vm.$refs.camera.submitALL();
       }
     },
     directives: {

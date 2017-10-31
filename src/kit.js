@@ -12,6 +12,44 @@ export default {
 
       }
     })
+  },
+  //获取控件左绝对位置
+  getAbsoluteLeft(objectId) {
+    let o = document.getElementById(objectId)
+    let oLeft = o.offsetLeft
+    while (o.offsetParent != null) {
+      let oParent = o.offsetParent
+      oLeft += oParent.offsetLeft
+      o = oParent
+    }
+    return oLeft
+  },
+
+
+  //获取控件上绝对位置
+  getAbsoluteTop(objectId) {
+    let o = document.getElementById(objectId);
+    let oTop = o.offsetTop;
+    while (o.offsetParent != null) {
+      let oParent = o.offsetParent
+      oTop += oParent.offsetTop  // Add parent top position
+      o = oParent
+    }
+    return oTop
+  },
+
+  //获取控件宽度
+  getElementWidth(objectId) {
+    let x = document.getElementById(objectId);
+    return x.offsetWidth;
+  },
+
+
+  //获取控件高度
+  getElementHeight(objectId) {
+    let x = document.getElementById(objectId);
+    return x.offsetHeight;
   }
+
 }
 
