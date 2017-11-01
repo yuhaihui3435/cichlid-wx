@@ -29,9 +29,10 @@
 </template>
 
 <script>
-  import { Loading,  TransferDomDirective as TransferDom ,ViewBox ,Tabbar, TabbarItem,XHeader } from 'vux'
+  import { Loading,  TransferDomDirective as TransferDom ,ViewBox ,Tabbar, TabbarItem,XHeader,cookie } from 'vux'
   import {mapState} from 'vuex'
   import TB from './TabBar'
+  import KIT from './kit'
 
 export default {
 
@@ -49,7 +50,20 @@ export default {
     }
   },
   mounted: function () {
+    let ccId=cookie.get("ccId");
+    let vm=this;
+    console.info(ccId);
+    if(!ccId){
+      this.$store.dispatch('LOAD_APPINFO').then(()=>{
+        let appId=vm.$store.state.APPID;
+        let callbackUrl=encodeURIComponent('http://wx.cichlid.cc/wc/wxCallback');
+        let wxUrl='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+callbackUrl+'&response_type=code&scope=snsapi_base&state=1#wechat_redirect'
+        KIT.showMsg(wxUrl)
+        window.location.href=wxUrl
 
+      })
+
+    }
   },
   computed:{ ...mapState({
     'data_loading':state=>state.data_loading,
