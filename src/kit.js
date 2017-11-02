@@ -53,6 +53,7 @@ export default {
   },
 
   checkLogin(vm,cbPath){
+    alert(cookie)
     let ccId=cookie.get("ccId");
     vm.$vux.toast.show({
       text: ccId
