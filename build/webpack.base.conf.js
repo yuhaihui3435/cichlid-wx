@@ -6,6 +6,7 @@ const vuxLoader = require('vux-loader')
 
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var ZipPlugin = require('zip-webpack-plugin');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -67,7 +68,13 @@ let webpackConfig = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new ZipPlugin({
+      path:path.join(resolve('dist')),
+      filename: 'dist.zip',
+    })
+  ]
 }
 
 
