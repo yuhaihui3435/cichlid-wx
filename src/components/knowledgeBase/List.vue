@@ -47,7 +47,7 @@
     } ,
     mounted: function () {
       this.$vux.alert.show({
-        content:cookie.get('ccId');
+        content:cookie.get('ccId')
       })
       console.info(this.$store)
       this.$store.dispatch('SET_TABBARSHOW',true)
