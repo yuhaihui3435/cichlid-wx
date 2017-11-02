@@ -18,9 +18,12 @@
 
     },
     mounted: function () {
-      //登录检查
-//      KIT.checkLogin(this,'kb');
-      this.$router.push({ path: 'kb'})
+      setTimeout(() => {
+        //登录检查
+        KIT.checkLogin(this,'kb');
+      }, 2000)
+
+//      this.$router.push({ path: 'kb'})
     },
     components: {
       vueLoading
