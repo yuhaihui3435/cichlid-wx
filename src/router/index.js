@@ -4,7 +4,8 @@ import KbList from '@/components/knowledgeBase/List'
 import KbView from '@/components/knowledgeBase/View'
 import ArtList from '@/components/articles/List'
 import ArtView from '@/components/articles/View'
-import myView from '@/components/my/Index'
+// import myView from '@/components/my/Index'
+import startView from '@/components/Start'
 
 Vue.use(Router)
 
@@ -14,6 +15,15 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'start',
+      component: startView,
+      meta: {
+        //keepAlive: true, // 需要被缓存
+        title:'应用启动中...'
+      }
+    },
+    {
+      path: '/kb',
       name: 'kbList',
       component: KbList,
       meta: {
@@ -50,15 +60,15 @@ export default new Router({
       }
 
     },
-    {
-      path:'/my',
-      name:'myView',
-      component:myView,
-      props: true,
-      meta: {
-        title:'我的'
-      }
-    }
+    // {
+    //   path:'/my',
+    //   name:'myView',
+    //   component:myView,
+    //   props: true,
+    //   meta: {
+    //     title:'我的'
+    //   }
+    // }
   ],
 
 })

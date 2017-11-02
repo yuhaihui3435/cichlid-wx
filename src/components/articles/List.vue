@@ -31,6 +31,7 @@
       'artCatalogList':state=>state.art.artCatalogList,
                           })},
     mounted: function () {
+      this.$store.dispatch('SET_TABBARSHOW',true)
       //this.$refs.artList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_ARTCATALOG_LIST')
     },

@@ -4,8 +4,7 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import App from './App'
 import router from './router/index'
-import { AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin,ConfirmPlugin } from 'vux'
-
+import { cookie,AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin,ConfirmPlugin } from 'vux'
 import VueLazyload from 'vue-lazyload'
 import store from './store/index'
 import { sync } from 'vuex-router-sync'
@@ -29,6 +28,8 @@ Vue.use(VueLazyload,{
   listenEvents:['scroll','wheel','mousewheel','resize','animationend','transitionend','touchmove'], //你想让vue监听的事件
 })
 
+
+
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
@@ -45,12 +46,14 @@ Vue.config.productionTip = false
 
 sync(store, router)
 
+
 /* eslint-disable no-new */
 const vue=new Vue({
   store,
   router,
   render: h => h(App)
 }).$mount('#app-box')
+
 
 
 

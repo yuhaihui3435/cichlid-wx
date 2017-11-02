@@ -1,7 +1,7 @@
 <template>
   <div>
       <x-header :left-options="{showBack: true}"  :right-options="{showMore: false}"  style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">{{kb_view_headerTitle}}<a slot="right" @click="cameraPopupShow=true">上传照片</a></x-header>
-      <tab :line-width=2 active-color='#09BB07' style="padding-top: 44px" >
+      <tab :line-width=2  style="padding-top: 44px" >
         <tab-item selected @on-item-click="viewBaseInfo">基本信息</tab-item>
         <tab-item @on-item-click="viewDetailInfo">详细描述</tab-item>
         <tab-item @on-item-click="photoWall">照片墙</tab-item>
@@ -47,9 +47,11 @@
         })},
     mounted: function () {
       let id=this.id
+      this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_KB_VIEW',{id:id}).then(()=>{
         //this.$router.push('kbView')
       })
+
     },
     methods: {
       viewBaseInfo(){

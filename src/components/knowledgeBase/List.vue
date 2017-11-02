@@ -46,12 +46,15 @@
             })
     } ,
     mounted: function () {
+      console.info(this.$store)
+      this.$store.dispatch('SET_TABBARSHOW',true)
 //      this.$refs.kbList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_SZ_LIST')
+
     },
     activated:function () {
       let csp= this.$store.state.kb.currScrollerPosition;
-      console.info(csp)
+//      console.info(csp)
       if(csp.length!=0){
 
           setTimeout(() => {
@@ -63,7 +66,7 @@
     deactivated:function () {
       let currScrollerPosition=this.$refs.kbList_scroller.getPosition();//获取当前下拉的位置[]
       this.$store.dispatch('SET_KB_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
-      console.info(currScrollerPosition);
+//      console.info(currScrollerPosition);
     },
     methods: {
       sz_onChange(val){

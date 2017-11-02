@@ -23,7 +23,8 @@ const store = new Vuex.Store({
     data_loading_txt:'数据加载中...',
     urlPrefix:'/api',
     APPID:'',
-    APPSECRET:''
+    APPSECRET:'',
+    tabbarShow:false,
   },
   actions: {
 
@@ -41,8 +42,15 @@ const store = new Vuex.Store({
           reject();
         })
       })
-    }
+    },SET_LOADING:({commit,state},param)=>{
+      commit('SET_LOADING',param)
+    },
+    SET_TABBARSHOW:({commit,state},param)=>{
+      commit('SET_TABBARSHOW',param)
+    },
   },
+
+
   mutations: {
 
     SET_URLPREFIX:(state,param)=>{
@@ -51,6 +59,15 @@ const store = new Vuex.Store({
     SET_APPINFO:(state,data)=>{
       state.APPID=data.APPID;
       state.APPSECRET=data.APPSECRET;
+    },
+    SET_LOADING:(state,param)=>{
+      state.data_loading=param.data_loading
+      if(param.data_loading_txt)
+        state.data_loading_txt=param.data_loading_txt
+    },
+    SET_TABBARSHOW:(state,param)=>{
+      state.tabbarShow=param
+
     }
   }
 })

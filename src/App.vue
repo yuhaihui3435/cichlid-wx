@@ -9,17 +9,17 @@
 
     </view-box>
 
-    <tabbar slot="bottom">
-      <tabbar-item link="/"  @on-item-click="tabbarItemClickHandler('/')" :selected="route.path === '/'">
+    <tabbar slot="bottom" v-show="tabbarShow">
+      <tabbar-item link="/kb"  @on-item-click="tabbarItemClickHandler('/kb')" :selected="route.path === '/kb'">
 
         <span slot="label">知识库</span>
       </tabbar-item>
-      <tabbar-item  link="/art" :selected="route.path === '/art'" @on-item-click="tabbarItemClickHandler('/art')">
+      <tabbar-item  link="/art" :selected="route.path === '/art'" @on-item-click="tabbarItemClickHandler('/art')" >
         <span slot="label">杂七杂八</span>
       </tabbar-item>
-      <tabbar-item  link="/my" :selected="route.path === '/my'" @on-item-click="tabbarItemClickHandler('/my')">
-        <span slot="label">我的</span>
-      </tabbar-item>
+      <!--<tabbar-item  link="/my" :selected="route.path === '/my'" @on-item-click="tabbarItemClickHandler('/my')">-->
+        <!--<span slot="label">我的</span>-->
+      <!--</tabbar-item>-->
     </tabbar>
     <div v-transfer-dom>
       <loading :show="data_loading" :text="data_loading_txt"></loading>
@@ -31,11 +31,9 @@
 <script>
   import { Loading,  TransferDomDirective as TransferDom ,ViewBox ,Tabbar, TabbarItem,XHeader,cookie } from 'vux'
   import {mapState} from 'vuex'
-  import TB from './TabBar'
   import KIT from './kit'
 
 export default {
-
 
   directives: {
     TransferDom
@@ -50,26 +48,14 @@ export default {
     }
   },
   mounted: function () {
-    let ccId=cookie.get("ccId");
-    let vm=this;
-    console.info(ccId);
-    if(!ccId){
-      this.$store.dispatch('LOAD_APPINFO').then(()=>{
-        let appId=vm.$store.state.APPID;
-        let callbackUrl=encodeURIComponent('http://wx.cichlid.cc/wc/wxCallback');
-        let wxUrl='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+callbackUrl+'&response_type=code&scope=snsapi_base&state=1#wechat_redirect'
-        KIT.showMsg(wxUrl)
-        window.location.href=wxUrl
 
-      })
-
-    }
   },
   computed:{ ...mapState({
     'data_loading':state=>state.data_loading,
     'data_loading_txt':state=>state.data_loading_txt,
     route: state => state.route,
     path: state => state.route.path,
+    'tabbarShow':state =>state.tabbarShow,
   })},
   methods:{
     tabbarItemClickHandler(path){
@@ -78,7 +64,7 @@ export default {
     }
   },
   components: {
-    Loading,TB,ViewBox,Tabbar, TabbarItem,XHeader
+    Loading,ViewBox,Tabbar, TabbarItem,XHeader
   },
   data(){
     return {

@@ -1,7 +1,8 @@
 import vue from './main'
+import {cookie } from 'vux'
 export default {
   showMsg(msg,title) {
-    console.info(this)
+    console.info(vue);
     vue.$vux.alert.show({
       title: title?title:'提示消息',
       content: msg,
@@ -49,7 +50,27 @@ export default {
   getElementHeight(objectId) {
     let x = document.getElementById(objectId);
     return x.offsetHeight;
+  },
+
+  checkLogin(vm,cbPath){
+    let ccId=cookie.get("ccId");
+    vm.$vux.toast.show({
+      text: ccId
+    })
+    if(!ccId){
+      vm.$store.dispatch('LOAD_APPINFO').then(()=>{
+        let appId=vue.$store.state.APPID;
+        let callbackUrl=encodeURIComponent('http://wx.cichlid.cc/wc/wxCallback');
+        let wxUrl='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+callbackUrl+'&response_type=code&scope=snsapi_userinfo&state='+cbPath+'#wechat_redirect'
+        window.location.href=wxUrl
+
+      })
+
+    }else{
+      vm.$router.push({ path: 'kb'})
+    }
   }
+
 
 }
 

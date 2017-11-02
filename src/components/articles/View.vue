@@ -20,7 +20,7 @@
       'art_view_detail':state=>state.art.art_view_detail
     })},
     mounted: function () {
-
+      this.$store.dispatch('SET_TABBARSHOW',true)
       let id=this.id
       this.$store.dispatch('LOAD_ART_VIEW',{id:id}).then(()=>{
 

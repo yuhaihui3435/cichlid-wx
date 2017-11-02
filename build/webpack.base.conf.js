@@ -69,6 +69,7 @@ let webpackConfig = {
       }
     ]
   },
+  //压缩输出的文件夹，由于webpack的打包顺序，导致index.html未被直接压缩，此处未解决。jenkins
   plugins: [
     new ZipPlugin({
       path:path.join(resolve('dist')),
@@ -79,5 +80,8 @@ let webpackConfig = {
 
 
 module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: ['vux-ui', 'progress-bar', 'duplicate-style']
+  plugins: ['vux-ui', 'progress-bar', 'duplicate-style',{
+    name: 'less-theme',
+    path: 'src/themes/blue/theme.less'
+  }]
 })
