@@ -32,7 +32,7 @@
 </template>
 <script>
   import Vue from 'vue'
-  import {XHeader,TransferDom,Selector,Group,PopupPicker,Search,Panel,Actionsheet} from 'vux'
+  import {XHeader,TransferDom,Selector,Group,PopupPicker,Search,Panel,Actionsheet,cookie} from 'vux'
   import VueScroller from 'vue-scroller'
   import {mapState} from 'vuex'
 
@@ -46,6 +46,9 @@
             })
     } ,
     mounted: function () {
+      this.$vux.alert.show({
+        content:cookie.get('ccId');
+      })
       console.info(this.$store)
       this.$store.dispatch('SET_TABBARSHOW',true)
 //      this.$refs.kbList_scroller.triggerPullToRefresh();
