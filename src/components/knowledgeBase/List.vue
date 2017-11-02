@@ -46,10 +46,10 @@
             })
     } ,
     mounted: function () {
-      this.$vux.alert.show({
-        content:cookie.get('ccId')
-      })
-      console.info(this.$store)
+
+
+      console.info(cookie.get('ccId',{'path':'/'}))
+
       this.$store.dispatch('SET_TABBARSHOW',true)
 //      this.$refs.kbList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_SZ_LIST')
