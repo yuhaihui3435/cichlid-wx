@@ -35,6 +35,7 @@
   import {XHeader,TransferDom,Selector,Group,PopupPicker,Search,Panel,Actionsheet,cookie} from 'vux'
   import VueScroller from 'vue-scroller'
   import {mapState} from 'vuex'
+  import KIT from '../../kit'
 
   Vue.use(VueScroller)
 
@@ -47,12 +48,8 @@
     } ,
     mounted: function () {
 
-      console.info(document.cookie)
-      console.info(cookie.get('ccId',{'path':'/'}))
-
       this.$store.dispatch('SET_TABBARSHOW',true)
-//      this.$refs.kbList_scroller.triggerPullToRefresh();
-      this.$store.dispatch('LOAD_SZ_LIST')
+      this.$store.dispatch('LOAD_SZ_LIST');
 
     },
     activated:function () {

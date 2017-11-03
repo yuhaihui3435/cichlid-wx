@@ -26,6 +26,7 @@ export default new Router({
       path: '/kb',
       name: 'kbList',
       component: KbList,
+      query:{a:1,b:2},
       meta: {
         keepAlive: true, // 需要被缓存
         title:'知识库'

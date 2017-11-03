@@ -20,7 +20,7 @@
     mounted: function () {
       setTimeout(() => {
         //登录检查
-        this.$router.push({ path: 'kb'});
+        this.$router.push({ path: 'kb',query:{a:1,b:2}});
       }, 2000)
 
 //      this.$router.push({ path: 'kb'})
