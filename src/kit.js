@@ -52,25 +52,6 @@ export default {
     return x.offsetHeight;
   },
 
-  checkLogin(vm,cbPath){
-   alert(window.document.domain);
-    let ccId=cookie.get("ccId");
-    vm.$vux.toast.show({
-      text: ccId
-    })
-    if(!ccId){
-      vm.$store.dispatch('LOAD_APPINFO').then(()=>{
-        let appId=vue.$store.state.APPID;
-        let callbackUrl=encodeURIComponent('http://www.cichlid.cc/wc/wxCallback');
-        let wxUrl='https://open.weixin.qq.com/connect/oauth2/authorize?appid='+appId+'&redirect_uri='+callbackUrl+'&response_type=code&scope=snsapi_userinfo&state='+cbPath+'#wechat_redirect'
-        window.location.href=wxUrl
-
-      })
-
-    }else{
-      vm.$router.push({ path: 'kb'})
-    }
-  }
 
 
 }
