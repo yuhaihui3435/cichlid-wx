@@ -47,7 +47,7 @@
     } ,
     mounted: function () {
 
-
+      console.info(document.cookie)
       console.info(cookie.get('ccId',{'path':'/'}))
 
       this.$store.dispatch('SET_TABBARSHOW',true)
