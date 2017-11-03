@@ -67,7 +67,7 @@ export default{
     LOAD_SZ_LIST: function ({commit,state},param) {
       console.info(this.state.route.path)
       state.data_loading=true;
-      axios.post(this.state.urlPrefix+'/wc/querySpecies'+kit.getUrlByState(this.state)+"-").then((response) => {
+      axios.post(this.state.urlPrefix+'/wc/querySpecies?vPath='+kit.getUrlByState(this.state)).then((response) => {
         commit('SET_SZ_LIST', { list: response.data })
       }, (err) => {
         console.error(err)
