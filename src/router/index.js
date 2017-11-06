@@ -19,7 +19,8 @@ export default new Router({
       component: startView,
       meta: {
         //keepAlive: true, // 需要被缓存
-        title:'应用启动中...'
+        title:'应用启动中...',
+
       }
     },
     {
@@ -29,6 +30,7 @@ export default new Router({
       query:{a:1,b:2},
       meta: {
         keepAlive: true, // 需要被缓存
+        requireAuth: true,
         title:'知识库'
       }
     },
@@ -38,7 +40,8 @@ export default new Router({
       component:KbView,
       props: true,
       meta: {
-        title:'知识详细'
+        title:'知识详细',
+        requireAuth: true,
       }
     },
     {
@@ -48,6 +51,7 @@ export default new Router({
       props: true,
       meta: {
         keepAlive: true, // 需要被缓存
+        requireAuth: true,
         title:'杂七杂八'
       }
     },
@@ -57,7 +61,8 @@ export default new Router({
       component:ArtView,
       props: true,
       meta: {
-        title:'杂七杂八详细'
+        title:'杂七杂八详细',
+        requireAuth: true,
       }
 
     },

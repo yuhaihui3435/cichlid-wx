@@ -52,16 +52,7 @@ export default {
     return x.offsetHeight;
   },
 
-  getUrlByState(state){
 
-    let query=state.route.query;
-    let queryStr='';
-    for(let q in query){
-      queryStr+=((queryStr=='')?'?':'&')+q+"="+query[q]
-    }
-
-    return (queryStr=='')?state.route.path:state.route.path+queryStr;
-  }
 
 }
 

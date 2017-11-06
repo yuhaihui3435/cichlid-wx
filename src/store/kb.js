@@ -1,4 +1,5 @@
 import axios from 'axios'
+import HTTP from '../http'
 import kit from '../kit'
 import qs from 'qs';
 const qiniu_url='http://images.cichlid.cc/';
@@ -21,15 +22,11 @@ export default{
       param.offset=state.kbOffset
       //state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/searchKB',qs.stringify(param)).then((response) => {
-          commit('SET_KB_LIST', { list: response.data })
+        let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
+        if(response.data.status==200){
+          commit('SET_KB_LIST', { list: response.data });
           resolve();
-        }, (err) => {
-          console.error(err)
-          //state.data_loading=false;
-          kit.showMsg("系统出错了");
-          reject();
-        })
+        }
       });
 
     },
@@ -37,15 +34,11 @@ export default{
       param.offset=state.kbOffset
       //state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/searchKB',qs.stringify(param)).then((response) => {
+        let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
+        if(response.data.status==200){
           commit('ADD_KB_LIST', { list: response.data })
           resolve();
-        }, (err) => {
-          console.error(err)
-          //state.data_loading=false;
-          kit.showMsg("系统出错了");
-          reject();
-        })
+        }
       });
 
     },
@@ -67,13 +60,13 @@ export default{
     LOAD_SZ_LIST: function ({commit,state},param) {
       console.info(this.state.route.path)
       state.data_loading=true;
-      axios.post(this.state.urlPrefix+'/wc/querySpecies?vPath='+kit.getUrlByState(this.state)).then((response) => {
-        commit('SET_SZ_LIST', { list: response.data })
-      }, (err) => {
-        console.error(err)
-        state.data_loading=false;
-        kit.showMsg("系统出错了");
-      })
+      let response=HTTP.post(this.state.urlPrefix+'/wc/querySpecies')
+        if(response.status==200)
+        {
+          commit('SET_SZ_LIST', { list: response.data })
+        }
+
+
     },
     SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{
       commit('SET_KB_CURRSCROLLERPOSITION', param)
