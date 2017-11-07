@@ -20,7 +20,7 @@
     mounted: function () {
 
 
-      let query=this.$router.query;
+      let query=this.$route.query;
       console.info("query="+query);
 
       if(query&&query['woe']==1000){
@@ -32,18 +32,18 @@
       }
 
       let lastPath=window.localStorage.getItem("lastPath");
-      let lastQuery=window.localStorage.getItem("lastQuery");
+      let lastParams=window.localStorage.getItem("lastParams");
 
       console.info("lastPath="+lastPath);
-      console.info("lastQuery="+lastQuery);
+      console.info("lastParams="+lastParams);
 
 
       setTimeout(() => {
 
         if(lastPath){
           window.localStorage.removeItem("lastPath")
-          window.localStorage.removeItem("lastQuery")
-          this.$router.push({ path: lastPath,query:lastQuery});
+          window.localStorage.removeItem("lastParams")
+          this.$router.push({ path: lastPath,params:lastParams});
         }else{
           this.$router.push({ path: 'kb'});
         }

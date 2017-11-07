@@ -22,11 +22,11 @@ function errHandle(err) {
   VUE.$store.dispatch("SET_LOADING",{data_loading:false});
   if(err.response.status==401){
     console.info("未授权处理")
-    let path=VUE.$router.path;
-    let query=VUE.$router.query;
+    let path=VUE.$route.path;
+    let params=VUE.$route.params;
     console.info("path="+path)
-    console.info("query="+query)
-    window.localStorage.setItem("lastPath",path);
+    console.info("params="+params)
+    window.localStorage.setItem("lastParams",params);
     window.localStorage.setItem("lastQuery",query);
     window.location.href=VUE.$store.state.urlPrefix+"/wc/toWXOAuth2"
   }else{
