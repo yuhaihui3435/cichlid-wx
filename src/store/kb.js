@@ -21,10 +21,9 @@ export default{
       param.offset=state.kbOffset
       //state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
-        if(response.data.status==200){
-          commit('SET_KB_LIST', { list: response.data });
-        }
+        HTTP.post(this.state.urlPrefix+'/wc/searchKB',param).then((response)=>{if (response.data.status == 200) {
+          commit('SET_KB_LIST', {list: response.data});
+        }})
         resolve();
       });
 
@@ -33,10 +32,11 @@ export default{
       param.offset=state.kbOffset
       //state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
-        if(response.data.status==200){
-          commit('ADD_KB_LIST', { list: response.data })
-        }
+        HTTP.post(this.state.urlPrefix+'/wc/searchKB',param).then((response)=>{
+          if(response.data.status==200){
+            commit('ADD_KB_LIST', { list: response.data })
+          }
+        })
         resolve();
       });
 
@@ -44,11 +44,13 @@ export default{
     LOAD_KB_VIEW: function ({ commit,state },param) {
       state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/queryKbView',param)
-        if(response.data.status==200)
-        {
-          commit('LOAD_KB_VIEW', { list: response.data })
-        }
+        HTTP.post(this.state.urlPrefix+'/wc/queryKbView',param).then((response)=>{
+          if(response.data.status==200)
+          {
+            commit('LOAD_KB_VIEW', { list: response.data })
+          }
+        })
+
         resolve();
       });
 
@@ -56,12 +58,12 @@ export default{
     LOAD_SZ_LIST: function ({commit,state},param) {
       console.info(this.state.route.path)
       state.data_loading=true;
-      let response=HTTP.post(this.state.urlPrefix+'/wc/querySpecies')
+      let response=HTTP.post(this.state.urlPrefix+'/wc/querySpecies').then((response)=>{
         if(response.status==200)
         {
           commit('SET_SZ_LIST', { list: response.data })
         }
-
+      })
     },
     SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{
       commit('SET_KB_CURRSCROLLERPOSITION', param)
