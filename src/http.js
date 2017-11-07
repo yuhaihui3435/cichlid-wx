@@ -15,7 +15,7 @@ axios.interceptors.response.use(response => response, error =>  Promise.reject(e
 
 function responseHandle(response) {
   VUE.$store.state.data_loading=false
-  return response
+    return response
 }
 
 function errHandle(err) {
@@ -42,7 +42,7 @@ export default {
         'X-Requested-With': 'XMLHttpRequest',
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       }
-    }).then(responseHandle,errHandle)
+    }).then(responseHandle).catch(errHandle)
   },
   get(url, params) {
     return axios({
@@ -53,6 +53,6 @@ export default {
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }
-    }).then(responseHandle,errHandle)
+    }).then(responseHandle).catch(errHandle)
   }
 }
