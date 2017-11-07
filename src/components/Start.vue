@@ -18,12 +18,40 @@
 
     },
     mounted: function () {
+
+
+      let query=this.$router.query;
+      console.info("query="+query);
+
+      if(query&&query['woe']==1000){
+        this.$vux.toast.text('微信认证成功，等待页面加载')
+
+      }else{
+        this.$vux.toast.text('微信认证失败，无法完成前一步操作')
+
+      }
+
+      let lastPath=window.localStorage.getItem("lastPath");
+      let lastQuery=window.localStorage.getItem("lastQuery");
+
+      console.info("lastPath="+lastPath);
+      console.info("lastQuery="+lastQuery);
+
+
       setTimeout(() => {
-        //登录检查
-        this.$router.push({ path: 'kb',query:{a:1,b:2}});
+
+        if(lastPath){
+          window.localStorage.removeItem("lastPath")
+          window.localStorage.removeItem("lastQuery")
+          this.$router.push({ path: lastPath,query:lastQuery});
+        }else{
+          this.$router.push({ path: 'kb'});
+        }
+
+
+
       }, 2000)
 
-//      this.$router.push({ path: 'kb'})
     },
     components: {
       vueLoading

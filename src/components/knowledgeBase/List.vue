@@ -49,7 +49,7 @@
     mounted: function () {
 
       this.$store.dispatch('SET_TABBARSHOW',true)
-      //this.$store.dispatch('LOAD_SZ_LIST');
+      this.$store.dispatch('LOAD_SZ_LIST');
 
     },
     activated:function () {
