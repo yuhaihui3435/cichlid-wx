@@ -27,7 +27,7 @@ function errHandle(err) {
     console.info("path="+path)
     console.info("params="+params)
     window.localStorage.setItem("lastParams",params);
-    window.localStorage.setItem("lastQuery",query);
+    window.localStorage.setItem("lastPath",path);
     window.location.href=VUE.$store.state.urlPrefix+"/wc/toWXOAuth2"
   }else{
     KIT.showMsg("系统错误，请稍后再试!")
