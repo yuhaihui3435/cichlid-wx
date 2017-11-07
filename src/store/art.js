@@ -17,10 +17,12 @@ export default{
       param.offset=state.artOffset
 
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
-        if(response.data.status==200){
-          commit('SET_ART_LIST', { list: response.data })
-        }
+        let res=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
+        res.then((response)=>{
+          if(response&&response.status==200){
+            commit('SET_ART_LIST', { list: response.data })
+          }
+        })
         resolve();
       });
 
@@ -28,11 +30,14 @@ export default{
     LOAD_MORE_ART_LIST: function ({ commit,state },param) {
       param.offset=state.artOffset
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
-        if(response.data.status==200){
-          commit('ADD_ART_LIST', { list: response.data })
+        let res=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
+        res.then((response)=>{
+          if(response&&response.status==200){
+            commit('ADD_ART_LIST', { list: response.data })
 
-        }
+          }
+        })
+
         resolve();
       });
 
@@ -40,22 +45,27 @@ export default{
     LOAD_ART_VIEW: function ({ commit,state },param) {
 
       return new Promise((resolve, reject)=>{
-        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArtView',param)
-        if(response.data.status==200){
-          commit('LOAD_ART_VIEW', { list: response.data })
+        let res=HTTP.post(this.state.urlPrefix+'/wc/queryArtView',param)
+        res.then((response)=>{
+          if(response.status==200){
+            commit('LOAD_ART_VIEW', { list: response.data })
+          }
+        })
 
-        }
         resolve();
       });
 
     },
     LOAD_ARTCATALOG_LIST: function ({commit,state}) {
 
-      let response=HTTP.post(this.state.urlPrefix+'/wc/queryArtCatalog')
-      if(response.data.status==200)
-      {
-        commit('SET_ARTCATALOG_LIST', { list: response.data })
-      }
+      let res=HTTP.post(this.state.urlPrefix+'/wc/queryArtCatalog')
+      res.then((response)=>{
+        if(response.status==200)
+        {
+          commit('SET_ARTCATALOG_LIST', { list: response.data })
+        }
+      })
+
     },
     SET_ART_CURRSCROLLERPOSITION:({ commit,state },param)=>{
       commit('SET_ART_CURRSCROLLERPOSITION', param)
