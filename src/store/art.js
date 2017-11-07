@@ -1,6 +1,5 @@
-import axios from 'axios'
+import HTTP from '../http'
 import kit from '../kit'
-import qs from 'qs';
 const qiniu_url='http://images.cichlid.cc/';
 export default{
   state: {
@@ -16,57 +15,47 @@ export default{
 
       state.artOffset=0
       param.offset=state.artOffset
-      console.info(this)
+
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/queryArt',qs.stringify(param)).then((response) => {
+        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
+        if(response.data.status==200){
           commit('SET_ART_LIST', { list: response.data })
-          resolve();
-        }, (err) => {
-          console.error(err)
-          kit.showMsg("系统出错了");
-          reject();
-        })
+        }
+        resolve();
       });
 
     },
     LOAD_MORE_ART_LIST: function ({ commit,state },param) {
       param.offset=state.artOffset
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/queryArt',qs.stringify(param)).then((response) => {
+        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArt',param)
+        if(response.data.status==200){
           commit('ADD_ART_LIST', { list: response.data })
-          resolve();
-        }, (err) => {
-          console.error(err)
-          kit.showMsg("系统出错了");
-          reject();
-        })
+
+        }
+        resolve();
       });
 
     },
     LOAD_ART_VIEW: function ({ commit,state },param) {
-      state.data_loading=true;
+
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/queryArtView',qs.stringify(param)).then((response) => {
+        let response=HTTP.post(this.state.urlPrefix+'/wc/queryArtView',param)
+        if(response.data.status==200){
           commit('LOAD_ART_VIEW', { list: response.data })
-          resolve();
-        }, (err) => {
-          console.error(err)
-          state.data_loading=false;
-          kit.showMsg("系统出错了");
-          reject();
-        })
+
+        }
+        resolve();
       });
 
     },
     LOAD_ARTCATALOG_LIST: function ({commit,state}) {
-      state.data_loading=true;
-      axios.post(this.state.urlPrefix+'/wc/queryArtCatalog').then((response) => {
+
+      let response=HTTP.post(this.state.urlPrefix+'/wc/queryArtCatalog')
+      if(response.data.status==200)
+      {
         commit('SET_ARTCATALOG_LIST', { list: response.data })
-      }, (err) => {
-        console.error(err)
-        state.data_loading=false;
-        kit.showMsg("系统出错了");
-      })
+      }
     },
     SET_ART_CURRSCROLLERPOSITION:({ commit,state },param)=>{
       commit('SET_ART_CURRSCROLLERPOSITION', param)

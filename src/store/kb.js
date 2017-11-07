@@ -1,7 +1,6 @@
-import axios from 'axios'
+
 import HTTP from '../http'
 import kit from '../kit'
-import qs from 'qs';
 const qiniu_url='http://images.cichlid.cc/';
 export default{
   state: {
@@ -25,8 +24,8 @@ export default{
         let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
         if(response.data.status==200){
           commit('SET_KB_LIST', { list: response.data });
-          resolve();
         }
+        resolve();
       });
 
     },
@@ -37,23 +36,20 @@ export default{
         let response=HTTP.post(this.state.urlPrefix+'/wc/searchKB',param)
         if(response.data.status==200){
           commit('ADD_KB_LIST', { list: response.data })
-          resolve();
         }
+        resolve();
       });
 
     },
     LOAD_KB_VIEW: function ({ commit,state },param) {
       state.data_loading=true;
       return new Promise((resolve, reject)=>{
-        axios.post(this.state.urlPrefix+'/wc/queryKbView',qs.stringify(param)).then((response) => {
+        let response=HTTP.post(this.state.urlPrefix+'/wc/queryKbView',param)
+        if(response.data.status==200)
+        {
           commit('LOAD_KB_VIEW', { list: response.data })
-          resolve();
-        }, (err) => {
-          console.error(err)
-          state.data_loading=false;
-          kit.showMsg("系统出错了");
-          reject();
-        })
+        }
+        resolve();
       });
 
     },
@@ -65,7 +61,6 @@ export default{
         {
           commit('SET_SZ_LIST', { list: response.data })
         }
-
 
     },
     SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{

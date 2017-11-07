@@ -31,18 +31,7 @@ const store = new Vuex.Store({
     SET_URLPREFIX:({ commit,state },param)=>{
       commit('SET_URLPREFIX', param)
     },
-    LOAD_APPINFO:({commit,state})=> {
-      return new Promise((resolve, reject) => {
-        axios.post(state.urlPrefix + '/wc/queryWXAPPINFO').then((response) => {
-          commit('SET_APPINFO', response.data)
-          resolve();
-        }, (err) => {
-          console.error(err)
-          kit.showMsg("系统出错了");
-          reject();
-        })
-      })
-    },SET_LOADING:({commit,state},param)=>{
+    SET_LOADING:({commit,state},param)=>{
       commit('SET_LOADING',param)
     },
     SET_TABBARSHOW:({commit,state},param)=>{
@@ -55,10 +44,6 @@ const store = new Vuex.Store({
 
     SET_URLPREFIX:(state,param)=>{
       state.urlPrefix=param
-    },
-    SET_APPINFO:(state,data)=>{
-      state.APPID=data.APPID;
-      state.APPSECRET=data.APPSECRET;
     },
     SET_LOADING:(state,param)=>{
       state.data_loading=param.data_loading
