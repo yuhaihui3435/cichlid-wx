@@ -19,14 +19,14 @@
     },
     mounted: function () {
 
-
+      this.$store.dispatch('SET_TABBARSHOW',false)
       let query=this.$route.query;
       console.info("query="+query);
 
       if(query&&query['woe']==1000){
         this.$vux.toast.text('微信认证成功，等待页面加载')
 
-      }else{
+      }else if(query&&query['woe']!=1000{
         this.$vux.toast.text('微信认证失败，无法完成前一步操作')
 
       }
