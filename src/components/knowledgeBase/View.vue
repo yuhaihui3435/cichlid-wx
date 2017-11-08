@@ -18,7 +18,7 @@
     <div v-transfer-dom>
       <popup v-model="cameraPopupShow" height="100%">
         <div>
-            <camera ref="camera"></camera>
+            <camera ref="camera" :module="'kb'" :moduleId="kb_id"></camera>
             <div style="width:100%;position: fixed;bottom: 0px">
               <div style="text-align: right;float: left;width: 40%;"><span class="cc-icon" style="color:red;" @click="closeCamera()">&#xe620;</span></div>
               <div style="text-align: left;float: right;width: 40%"><span class="cc-icon" style="color:green;" @click="uploadImg()" >&#xe627;</span></div>
@@ -43,7 +43,8 @@
       'kb_view_headerTitle':state=>state.kb.kb_view_headerTitle,
       'kb_view_baseInfo_list':state=>state.kb.kb_view_baseInfo_list,
       'kb_view_detail':state=>state.kb.kb_view_detail,
-      'kb_photoWall':state=>state.kb.kb_photoWall
+      'kb_photoWall':state=>state.kb.kb_photoWall,
+      'kb_id':state=>state.kb.kb_view_id,
         })},
     mounted: function () {
       let id=this.id

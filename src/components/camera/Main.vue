@@ -9,8 +9,8 @@
       <!-- 这种布局显示小图片和文字 -->
       <li v-for="ia in imgArray" :key="ia.id" :id="ia.id">
         <a @click='previewImage(ia.base64Str)'><img :src="ia.base64Str" v-preview="ia.base64Str" /></a>
-        <span class="list-img-close"  @click='delImage(ia.id)' v-show="uploadedImgs.indexOf(ia.id)==-1">&#xe620;</span>
-        <x-progress :percent="percent" :show-cancel="false" v-show="uploadingImgId==ia.id" :ref="ia.id+'Xp'" ></x-progress>
+        <span class="list-img-close"  @click='delImage(ia.id)' v-show="ia.state==0">&#xe620;</span>
+        <x-progress :percent="ia.percent" :show-cancel="false" v-show="ia.state==0" :ref="ia.id+'Xp'" ></x-progress>
       </li>
     </ul>
     <div class="preview"  v-show="isPreview" @click="closePreview">
@@ -127,6 +127,10 @@
   export default {
     name: 'camera',
     computed: {},
+    props:{
+      module:'',
+      moduleId:''
+    },
     mounted: function () {
 
     },
@@ -273,7 +277,7 @@
           }
 
           //console.info("执行了压缩处理，压缩后图片size："+ndata.length+"压缩率为:"+(((orgSize-ndata.length)/orgSize).toFixed(2))*100+"%")
-          vm.$data.imgArray.push({id: getUuid(), name: imgName, base64Str: ndata})
+          vm.$data.imgArray.push({id: getUuid(), name: imgName, base64Str: ndata,percent:0,state:0})
 
         };
       },
@@ -361,7 +365,7 @@
       dataURLtoBlob: function (fd) {
 
         let dataURL=fd.base64Str;
-
+        console.info(dataURL)
         let binaryString = atob(dataURL.split(',')[1]);
         let arrayBuffer = new ArrayBuffer(binaryString.length);
         let intArray = new Uint8Array(arrayBuffer);
@@ -387,7 +391,11 @@
             throw new Error('没救了');
           }
         }
-        return result;
+
+        // blob 转file
+        //const fileOfBlob = new File([result], fd.name);
+
+        return result
       },
       /**
        *
@@ -397,16 +405,26 @@
        * */
       blobToFormData: function (blob) {
         // 判断是否需要我们之前的重写
-        let NFormData = needsFormDataShim() ? FormDataShim : window.FormData;
+        let NFormData = needsFormDataShim ? FormDataShim : window.FormData;
         const oData = new NFormData();
         oData.append('file', blob);
+        console.info(this.module)
+        console.info(this.moduleId)
+        oData.append('module',this.module);
+        oData.append('moduleId',this.moduleId);
         return oData;
       },
 
 
       processData:function (fd) {
-        let formData= this.blobToFormData(this.dataURLtoBlob(fd));
-        this.uploadImg(formData);
+        //let formData= this.blobToFormData(this.dataURLtoBlob(fd));
+        let NFormData = needsFormDataShim ? FormDataShim : window.FormData;
+        const oData = new NFormData();
+        oData.append('module',this.module);
+        oData.append('moduleId',this.moduleId);
+        oData.append('base64Str',fd.base64Str);
+
+        this.uploadImg(oData,fd);
       },
 
       /**
@@ -459,7 +477,8 @@
         vm.previewImg = url;
       },
 
-      uploadImg: function (fromData,fd) {
+      uploadImg: function (formData,fd) {
+        console.info(formData)
         let vm=this;
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -467,7 +486,7 @@
             if (xhr.status === 200) {
               // 上传成功，获取到结果 results
               let results = JSON.parse(xhr.responseText);
-
+              fd.state=1;
             }
           } else {
             // 上传失败
@@ -480,12 +499,13 @@
 
             let percent = Math.round(evt.loaded / evt.total * 100) ;
 
-            vm.$ref[refStr][0].props['percent']=percent;
+            fd.percent=percent;
+
           }
         }
 
-        xhr.open('POST', '/api/upload', true);
-        xhr.send(fromData);
+        xhr.open('POST', '/api/wc/uploadPic', true);
+        xhr.send(formData);
       },
       submitALL:function () {
         let vm=this;
@@ -501,7 +521,7 @@
           const firstUpload=vm.gen.next();
 
           firstUpload.value.map((item)=>{
-            vm.compress(item, _this.processData);
+            vm.processData(item);
           });
 
 
@@ -544,7 +564,7 @@
     components: {Grid,GridItem,XProgress, },
     data() {
       return {
-        imgArray:[],//图片xinxi
+        imgArray:[],//图片信息
         checkArray:[],//图片是否选择检查临时变量
         layout:'grid',
         isPreview:false,

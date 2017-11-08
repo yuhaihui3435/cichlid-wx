@@ -12,6 +12,7 @@ export default{
     kb_view_detail:'',
     kb_photoWall:'',
     currScrollerPosition:[],
+    kb_view_id:''
   },
   actions: {
     LOAD_KB_LIST: function ({ commit,state },param) {
@@ -61,11 +62,14 @@ export default{
     LOAD_SZ_LIST: function ({commit,state},param) {
       console.info(this.state.route.path)
       state.data_loading=true;
-      let response=HTTP.post(this.state.urlPrefix+'/wc/querySpecies')
+      let res=HTTP.post(this.state.urlPrefix+'/wc/querySpecies')
+      res.then((response)=>{
         if(response&&response.status==200)
         {
           commit('SET_SZ_LIST', { list: response.data })
         }
+      })
+
 
     },
     SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{
@@ -154,7 +158,9 @@ export default{
         state.kb_view_baseInfo_list.push({'label':'稀有程度','value':list.rareTxt})
       if(list.reproduceTxt!='')
         state.kb_view_baseInfo_list.push({'label':'繁殖难度','value':list.reproduceTxt})
-      state.data_loading=false;
+
+      state.kb_view_id=list.id;
+
     },
     SET_SZ_LIST: (state,{list}) =>{
       state.szList=[]
