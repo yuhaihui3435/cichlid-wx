@@ -23,10 +23,10 @@
       let query=this.$route.query;
       console.info("query="+query);
 
-      if(query&&query['woe']==1000){
+      if(query!=undefined&&query['woe']==1000){
         this.$vux.toast.text('微信认证成功，等待页面加载')
 
-      }else if(query&&query['woe']!=1000){
+      }else if(query!=undefined&&query['woe']!=1000){
         this.$vux.toast.text('微信认证失败，无法完成前一步操作')
 
       }

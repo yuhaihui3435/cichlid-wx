@@ -20,7 +20,7 @@ function responseHandle(response) {
 
 function errHandle(err) {
   VUE.$store.dispatch("SET_LOADING",{data_loading:false});
-  if(err.response.status==401){
+  if(err&&err.response&&err.response.status==401){
     console.info("未授权处理")
     let path=VUE.$route.path;
     let params=VUE.$route.params;
