@@ -16,12 +16,13 @@
     <div class="preview"  v-show="isPreview" @click="closePreview">
       <img :src="previewImg">
     </div>
+
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import {Grid,GridItem,XProgress } from 'vux'
+  import {XProgress } from 'vux'
   import {mapState} from 'vuex'
   import kit from '../../kit'
   import EXIF from 'exif-js'
@@ -400,7 +401,7 @@
       /**
        *
        * blob 封装成formData
-       *
+       * 未使用，直接上传的base64 格式数据
        *
        * */
       blobToFormData: function (blob) {
@@ -408,8 +409,6 @@
         let NFormData = needsFormDataShim ? FormDataShim : window.FormData;
         const oData = new NFormData();
         oData.append('file', blob);
-        console.info(this.module)
-        console.info(this.moduleId)
         oData.append('module',this.module);
         oData.append('moduleId',this.moduleId);
         return oData;
@@ -423,8 +422,10 @@
         oData.append('module',this.module);
         oData.append('moduleId',this.moduleId);
         oData.append('base64Str',fd.base64Str);
-
-        this.uploadImg(oData,fd);
+        if(fd.state==0)
+          this.uploadImg(oData,fd);
+        else
+          return ;
       },
 
       /**
@@ -487,18 +488,17 @@
               // 上传成功，获取到结果 results
               let results = JSON.parse(xhr.responseText);
               fd.state=1;
+            }else {
+              kit.showMsg("图片上传失败，请重试");
             }
           } else {
             // 上传失败
           }
         }
         xhr.upload.onprogress = function (evt) {
-          let refStr=fd.id+'Xp';
 
-          if (evt.lengthComputable) {//
-
+          if (evt.lengthComputable) {
             let percent = Math.round(evt.loaded / evt.total * 100) ;
-
             fd.percent=percent;
 
           }
@@ -561,7 +561,7 @@
       }
     },
     directives: {},
-    components: {Grid,GridItem,XProgress, },
+    components: {XProgress, },
     data() {
       return {
         imgArray:[],//图片信息
@@ -569,9 +569,6 @@
         layout:'grid',
         isPreview:false,
         previewImg:'',
-        percent:0,
-        uploadingImgId:'',
-        uploadedImgs:[],
         maxUploadSize:3,
         gen:'',
       }

@@ -2,7 +2,7 @@ import vue from './main'
 import {cookie } from 'vux'
 export default {
   showMsg(msg,title) {
-    console.info(vue);
+    // console.info(vue);
     vue.$vux.alert.show({
       title: title?title:'提示消息',
       content: msg,
