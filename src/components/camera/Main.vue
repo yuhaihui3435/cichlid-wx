@@ -523,7 +523,7 @@
           }
         }
 
-        xhr.open('POST', '/api/wc/uploadPic', true);
+        xhr.open('POST', vm.$store.state.urlPrefix+'/wc/uploadPic', true);
         if(fd.state==0||fd.state==2)
         xhr.send(formData);
       },
