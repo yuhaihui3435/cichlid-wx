@@ -18,7 +18,7 @@
     </div>
     <scroller ref="kbList_scroller"
               :on-refresh="refresh"
-              :on-infinite="infinite" style="top: 150px;" :height="'100%'"  >
+              :on-infinite="infinite" style="top: 150px;" :height="'100%'"  noDataText="">
           <panel header="查询结果"  :list="kbList" :type="panelType" @on-img-error="onImgError" @on-click-item="queryKbView"></panel>
     </scroller>
 
@@ -77,15 +77,18 @@
         this.$store.dispatch('LOAD_KB_LIST',p)
       },
       clearSearchAll(){
-        this.clearSearchKey();
-        this.clearSearchSpecies();
+        this.searchKey=''
+        this.szVal=[]
+        this.refresh();
       },
 
       clearSearchKey(){
         this.searchKey=''
+        this.refresh();
       },
       clearSearchSpecies(){
         this.szVal=[]
+        this.refresh();
       },
       refresh: function (done) {
         let speciesId=''

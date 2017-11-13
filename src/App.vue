@@ -61,7 +61,8 @@ export default {
     tabbarItemClickHandler(path){
       console.info(this.$store)
 
-    }
+    },
+
   },
   components: {
     Loading,ViewBox,Tabbar, TabbarItem,XHeader

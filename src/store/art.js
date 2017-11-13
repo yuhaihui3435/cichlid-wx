@@ -77,7 +77,7 @@ export default{
       let art
       state.artOffset=list.pageNumber*list.pageSize;
       if(list.list.length==0){
-        state.data_loading=false;
+        //state.data_loading=false;
         return ;
       }
       for(let key in list.list){

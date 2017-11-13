@@ -14,6 +14,10 @@ export default {
       }
     })
   },
+  getQiNiuUrl(){
+    return 'http://images.cichlid.cc/';
+  },
+
   //获取控件左绝对位置
   getAbsoluteLeft(objectId) {
     let o = document.getElementById(objectId)

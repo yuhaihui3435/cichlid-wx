@@ -8,14 +8,13 @@
     <ul  class="grid">
       <!-- 这种布局显示小图片和文字 -->
       <li v-for="ia in imgArray" :key="ia.id" :id="ia.id">
-        <a @click='previewImage(ia.base64Str)'><img :src="ia.base64Str" v-preview="ia.base64Str" /></a>
-        <span class="list-img-close"  @click='delImage(ia.id)' v-show="ia.state==0">&#xe620;</span>
+        <img :src="ia.base64Str" v-preview="ia.base64Str" />
+        <span class="list-img-close"  @click='delImage(ia.id)' v-show="ia.state==0 || ia.state==2">&#xe620;</span>
         <x-progress :percent="ia.percent" :show-cancel="false" v-show="ia.state==0" :ref="ia.id+'Xp'" ></x-progress>
+        <span v-show="ia.state==2" style="color: darkred;">{{uploadErrorMsg}}</span>
+        <span v-show="ia.state==1" style="color: darkseagreen;">上传成功，等待审批。</span>
       </li>
     </ul>
-    <div class="preview"  v-show="isPreview" @click="closePreview">
-      <img :src="previewImg">
-    </div>
 
   </div>
 </template>
@@ -274,7 +273,7 @@
           if (orgSize <= compressSize) {
             ndata = canvas.toDataURL('image/jpeg', 0.95);
           } else {
-            ndata = canvas.toDataURL('image/jpeg', 0.2);
+            ndata = canvas.toDataURL('image/jpeg', 0.5);
           }
 
           //console.info("执行了压缩处理，压缩后图片size："+ndata.length+"压缩率为:"+(((orgSize-ndata.length)/orgSize).toFixed(2))*100+"%")
@@ -433,7 +432,7 @@
        * @param id  图片id
        */
       delImage: function (id) {
-        console.info(id)
+
         const vm = this;
         this.$vux.confirm.show({
           content: '确定要删除吗?',
@@ -443,7 +442,7 @@
           },
           onConfirm() {
             let index = 0;
-            console.info(vm.imgArray)
+
             for (let img of vm.imgArray) {
               if (img.id == id) {
                 vm.imgArray.splice(index, 1);
@@ -479,7 +478,7 @@
       },
 
       uploadImg: function (formData,fd) {
-        console.info(formData)
+
         let vm=this;
         let xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -487,13 +486,33 @@
             if (xhr.status === 200) {
               // 上传成功，获取到结果 results
               let results = JSON.parse(xhr.responseText);
-              fd.state=1;
+              if(results.resCode=='success')
+                fd.state=1;//上传成功
+              else{
+                fd.state=2;//上传失败
+                vm.uploadErrorMsg=results.resMsg;
+              }
+
+
+
             }else {
-              kit.showMsg("图片上传失败，请重试");
+              fd.state=2;//上传失败
             }
+            fd.percent=0;//恢复上传进度条
+
           } else {
             // 上传失败
           }
+
+          let nextUpload=vm.gen.next();
+          if(!nextUpload.done){
+            nextUpload.value.map((item)=>{
+              vm.processData(item);
+            });
+          }else{
+            vm.$vux.toast.hide();
+          }
+
         }
         xhr.upload.onprogress = function (evt) {
 
@@ -505,6 +524,7 @@
         }
 
         xhr.open('POST', '/api/wc/uploadPic', true);
+        if(fd.state==0||fd.state==2)
         xhr.send(formData);
       },
       submitALL:function () {
@@ -524,6 +544,11 @@
             vm.processData(item);
           });
 
+          vm.$vux.toast.show({
+            text: '图片上传中,请等候...',
+            isShowMask : true,
+            type:'text'
+          })
 
         }
       },
@@ -571,6 +596,8 @@
         previewImg:'',
         maxUploadSize:3,
         gen:'',
+        uploadErrorMsg:'上传失败，请重试。',
+
       }
     }
   }
@@ -579,65 +606,6 @@
 <style>
   @import '../style.css';
 
-  .camera-icon {
-    width: 100%;
-    height: 100px;
-    text-align: center;
-    display: block;
-    background-color: white;
-  }
-
-
-  /*-------------------------
-        网格布局
-    --------------------------*/
-
-  ul.grid{
-    list-style: none;
-    width: 100%;
-    margin: 20px auto;
-    text-align: left;
-
-  }
-
-  ul.grid li{
-    padding: 1px;
-    float:left;
-    /*cursor: pointer;*/
-    border:  1px solid #DDE6E8;
-    box-sizing: border-box;
-    width: 33.3%;
-  }
-
-  ul.grid li img{
-    width:100%;
-    height:120px;
-    object-fit: cover;
-    display:block;
-    border:none;
-    padding: 2px;
-    box-sizing: border-box;
-  }
-  .list-img-close {
-    font-family: 'iconfont';
-    font-size:20px;
-    display: block;
-    /*top: 10px;*/
-    /*right: -10px;*/
-    position: relative;
-    color: red;
-    line-height: 20px;
-    text-align: center;
-    padding: 1px;
-  }
-  .preview {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    z-index: 0;
-    overflow:hidden; word-break:break-all; }
 
 
 </style>

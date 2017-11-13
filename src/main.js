@@ -8,7 +8,7 @@ import { cookie,AlertPlugin, ToastPlugin,ConfigPlugin,WechatPlugin,ConfirmPlugin
 import VueLazyload from 'vue-lazyload'
 import store from './store/index'
 import { sync } from 'vuex-router-sync'
-import vuePicturePreview from 'vue-picture-preview'
+import vuePicturePreview from './components/vue-picture-preview-custom/'
 
 
 Vue.use(ConfigPlugin, {
@@ -31,16 +31,11 @@ Vue.use(VueLazyload,{
 
 
 router.beforeEach((to, from, next) => {
-  if(to.meta.requireAuth){
-    let loginToken=localStorage.getItem("loginToken");
-    // if(!loginToken){
-    //
-    // }
-  }
+
 
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
-    document.title = to.meta.title;
+    //document.title = document.title+'-'+to.meta.title;
   }
   next();
 })

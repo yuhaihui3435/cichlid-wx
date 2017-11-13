@@ -25,6 +25,8 @@ const store = new Vuex.Store({
     APPID:'',
     APPSECRET:'',
     tabbarShow:false,
+    previewImg:'',
+    isPreview:false,
   },
   actions: {
 

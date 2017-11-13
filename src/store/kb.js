@@ -1,10 +1,13 @@
 
 import HTTP from '../http'
+import KIT from '../kit'
 const qiniu_url='http://images.cichlid.cc/';
 export default{
   state: {
     kbList:[],
     kbOffset:0,
+    kbViewImgs:[],
+    kbViewImgsOffset:0,
     _szList:[],
     szList:[],
     kb_view_headerTitle:'',
@@ -13,6 +16,7 @@ export default{
     kb_photoWall:'',
     currScrollerPosition:[],
     kb_view_id:''
+
   },
   actions: {
     LOAD_KB_LIST: function ({ commit,state },param) {
@@ -60,7 +64,7 @@ export default{
 
     },
     LOAD_SZ_LIST: function ({commit,state},param) {
-      console.info(this.state.route.path)
+
       state.data_loading=true;
       let res=HTTP.post(this.state.urlPrefix+'/wc/querySpecies')
       res.then((response)=>{
@@ -75,6 +79,82 @@ export default{
     SET_KB_CURRSCROLLERPOSITION:({ commit,state },param)=>{
       commit('SET_KB_CURRSCROLLERPOSITION', param)
     },
+
+    LOAD_KB_VIEW_IMGS: function ({ commit,state },param) {
+
+      state.kbViewImgsOffset=0
+      param.offset=state.kbViewImgsOffset
+
+      return new Promise((resolve, reject)=>{
+        let res=HTTP.post(this.state.urlPrefix+'/wc/loadUploadPics',param)
+        res.then((response)=>{
+          if(response&&response.status==200){
+            commit('SET_KB_VIEW_IMGS_LIST', { list: response.data });
+          }
+        })
+
+        resolve();
+      });
+
+    },
+
+    LOAD_KB_MORE_VIEW_IMGS: function ({ commit,state },param) {
+      param.offset=state.kbViewImgsOffset
+
+      return new Promise((resolve, reject)=>{
+        let res=HTTP.post(this.state.urlPrefix+'/wc/loadUploadPics',param)
+
+        res.then((response)=>{
+          if(response&&response.status==200)
+            commit('ADD_KB_VIEW_IMGS_LIST', { list: response.data })
+        })
+        resolve();
+      });
+
+    },
+
+    DEL_KB_VIEW_IMG: function ({ commit,state },param) {
+
+      let _this=this;
+
+      return new Promise((resolve, reject)=>{
+        let res=HTTP.post(this.state.urlPrefix+'/wc/delKbPic',param)
+        res.then((response)=>{
+          if(response&&response.status==200){
+            if(response.data.resCode=='success'){
+              KIT.showMsg(response.data.resMsg);
+              this.dispatch('LOAD_KB_VIEW_IMGS',param);
+            }
+          }
+        })
+        resolve();
+      });
+
+    },
+    CHECK_KB_VIEW_IMG: function ({ commit,state },param) {
+
+      let _this=this;
+
+      return new Promise((resolve, reject)=>{
+        let res=HTTP.post(this.state.urlPrefix+'/wc/checkKbPic',param)
+        res.then((response)=>{
+          if(response&&response.status==200){
+            if(response.data.resCode=='success'){
+              KIT.showMsg(response.data.resMsg);
+              this.dispatch('LOAD_KB_VIEW_IMGS',param);
+            }
+          }
+        })
+        resolve();
+      });
+
+    },
+
+    RESET_KB_VIEW_IMGS_PARAMS(){
+      this.state.kb.kbViewImgsOffset=0
+      this.state.kb.kbViewImgs=[]
+    }
+
   },
   mutations: {
     ADD_KB_LIST: (state, { list }) => {
@@ -83,10 +163,10 @@ export default{
       let kb
       //if(list.pageNumber<list.totalPage)
       state.kbOffset=list.pageNumber*list.pageSize;
-      if(list.list.length==0){
-        state.data_loading=false;
-        return ;
-      }
+      // if(list.list.length==0){
+      //   state.data_loading=false;
+      //   return ;
+      // }
       for(let key in list.list){
         kb=list.list[key]
         panel={};
@@ -178,11 +258,25 @@ export default{
         state.szList.push(sz)
         state._szList.push(sz)
       }
-      state.data_loading=false;
+
     },
     SET_KB_CURRSCROLLERPOSITION:(state,param)=>{
       state.currScrollerPosition=param
     },
+    SET_KB_VIEW_IMGS_LIST: (state, { list }) => {
+      state.kbViewImgsOffset=list.pageNumber*list.pageSize;
+      state.kbViewImgs=list.list;
+    },
+    ADD_KB_VIEW_IMGS_LIST: (state, { list }) => {
+      if(list.list.length>0)
+      state.kbViewImgsOffset=list.pageNumber*list.pageSize;
+
+      // Array.prototype.push.apply(state.kbViewImgs,list.list);
+
+      for(var img of list.list){
+        state.kbViewImgs.push(img)
+      }
+    }
   },
   getters: {
     getKbList: state => {

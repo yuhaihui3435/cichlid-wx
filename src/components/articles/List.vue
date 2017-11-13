@@ -4,7 +4,7 @@
 
     <scroller ref="artList_scroller"
               :on-refresh="refresh"
-              :on-infinite="infinite" style="padding-top: 44px;" :height="'90%'">
+              :on-infinite="infinite" style="padding-top: 44px;" :height="'90%'" noDataText="">
       <group>
         <popup-picker title="选择分类" :data="artCatalogList" :columns="1" v-model="artCatalogVal" ref="artPicker" show-name @on-change="artCatalog_onChange"></popup-picker>
       </group>
