@@ -39,6 +39,18 @@ const store = new Vuex.Store({
     SET_TABBARSHOW:({commit,state},param)=>{
       commit('SET_TABBARSHOW',param)
     },
+    // LOAD_APPID:({commit,state})=> {
+    //   return new Promise((resolve, reject) => {
+    //     axios.post(state.urlPrefix + '/wc/queryAPPID').then((response) => {
+    //       commit('SET_APPID', response.data)
+    //       resolve();
+    //     }, (err) => {
+    //       // console.error(err)
+    //       // kit.showMsg("系统出错了");
+    //       reject();
+    //     })
+    //   })
+    // },
   },
 
 
@@ -55,7 +67,11 @@ const store = new Vuex.Store({
     SET_TABBARSHOW:(state,param)=>{
       state.tabbarShow=param
 
-    }
+    },
+    // SET_APPID:(state,data)=>{
+    //   state.APPID=data.APPID;
+    //   state.APPSECRET=data.APPSECRET;
+    // }
   }
 })
 export default store

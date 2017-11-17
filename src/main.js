@@ -9,6 +9,7 @@ import VueLazyload from 'vue-lazyload'
 import store from './store/index'
 import { sync } from 'vuex-router-sync'
 import vuePicturePreview from './components/vue-picture-preview-custom/'
+import HTTP from './http'
 
 
 Vue.use(ConfigPlugin, {
@@ -28,10 +29,75 @@ Vue.use(VueLazyload,{
   listenEvents:['scroll','wheel','mousewheel','resize','animationend','transitionend','touchmove'], //你想让vue监听的事件
 })
 
+Vue.prototype.SDKRegister = (that, callback) => {
+  // 接入微信JSSDK
+  // 获取微信JSSDK配置
+  let url = that.webUrl
+  let shareUrl=that.$route.path;
+  HTTP.post(url,{shareUrl:shareUrl}).then(response => {
+    if(response&&response.status==200) {
+      let res = response.data
+      console.info("服务端返回的jssdk相关的数据>>>" + res)
+      that.$wechat.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: res.appId, // 必填，公众号的唯一标识
+        timestamp: res.timestamp, // 必填，生成签名的时间戳
+        nonceStr: res.nonceStr, // 必填，生成签名的随机串
+        signature: res.signature, // 必填，签名，见附录1
+        // jsApiList: res.jsApiList
+        jsApiList: [
+          'checkJsApi',
+          'onMenuShareAppMessage', // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+          'onMenuShareTimeline', // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+          'onMenuShareQQ', // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
+          'onMenuShareWeibo', // 获取“分享到腾讯微博”按钮点击状态及自定义分享内容接口
+          'showAllNonBaseMenuItem'
+        ] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      })
+    }
+  })
+  that.$wechat.ready((res) => {
+    that.$wechat.showAllNonBaseMenuItem()
+    // 分享到朋友圈
+    let link = shareUrl
+    let title = ''
+    let imgUrl = ''
+    let desc = ''
 
+    that.$wechat.onMenuShareTimeline({
+      title: title, // 分享标题
+      link: link, // 分享链接
+      imgUrl: imgUrl, // 分享图标
+      success () {
+        // 用户确认分享后执行的回调函数
+        that.$alert('分享成功', 'success')
+      },
+      cancel () {
+        // 用户取消分享后执行的回调函数
+      }
+    })
+    // 分享给朋友
+    that.$wechat.onMenuShareAppMessage({
+      title: title, // 分享标题
+      desc: desc, // 分享描述
+      link: link, // 分享链接
+      imgUrl: imgUrl, // 分享图标
+      success: function () {
+        // 用户确认分享后执行的回调函数
+        that.$alert('分享成功', 'success')
+      },
+      cancel: function () {
+        // 用户取消分享后执行的回调函数
+      }
+    })
+    // 如果需要定制ready回调方法
+    if(callback){
+      callback.call(that)
+    }
+  })
+}
 
 router.beforeEach((to, from, next) => {
-
 
   /* 路由发生变化修改页面title */
   if (to.meta.title) {

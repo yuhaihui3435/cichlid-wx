@@ -70,6 +70,11 @@
       this.$store.dispatch('SET_KB_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
 //      console.info(currScrollerPosition);
     },
+    beforeCreate (){
+      console.log(this.$store.state.urlPrefix)
+      this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
+      this.SDKRegister(this, () => {})
+    },
     methods: {
       sz_onChange(val){
         if(val.length!=2){

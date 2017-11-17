@@ -21,7 +21,7 @@
 
       this.$store.dispatch('SET_TABBARSHOW',false)
       let query=this.$route.query;
-      console.info("query="+query);
+//      console.info("query="+query);
 
 
       if(query.hasOwnProperty("woe")&&query['woe']==1000){
@@ -35,8 +35,8 @@
       let lastPath=window.localStorage.getItem("lastPath");
       let lastParams=window.localStorage.getItem("lastParams");
 
-      console.info("lastPath="+lastPath);
-      console.info("lastParams="+lastParams);
+//      console.info("lastPath="+lastPath);
+//      console.info("lastParams="+lastParams);
 
 
       setTimeout(() => {

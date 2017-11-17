@@ -24,8 +24,8 @@ function errHandle(err) {
     console.info("未授权处理")
     let path=VUE.$route.path;
     let params=VUE.$route.params;
-    console.info("path="+path)
-    console.info("params="+params)
+    // console.info("path="+path)
+    // console.info("params="+params)
     window.localStorage.setItem("lastParams",params);
     window.localStorage.setItem("lastPath",path);
     window.location.href=VUE.$store.state.urlPrefix+"/wc/toWXOAuth2"
