@@ -6,20 +6,22 @@
     <div style="padding-top: 46px;width: 100%">
 
       <search
-      v-model="searchKey"
-      :auto-fixed="false"
-      @on-focus="onFocus"
-      @on-cancel="onCancel"
-      @on-submit="onSubmit"
-      ref="search"></search>
-    <group>
-      <popup-picker title="选择属种" :data="szList" :columns="2" v-model="szVal" ref="szPicker" show-name @on-change="sz_onChange"></popup-picker>
-    </group>
+        v-model="searchKey"
+        :auto-fixed="false"
+        @on-focus="onFocus"
+        @on-cancel="onCancel"
+        @on-submit="onSubmit"
+        ref="search"></search>
+      <group>
+        <popup-picker title="选择属种" :data="szList" :columns="2" v-model="szVal" ref="szPicker" show-name @on-change="sz_onChange"></popup-picker>
+      </group>
     </div>
     <scroller ref="kbList_scroller"
               :on-refresh="refresh"
               :on-infinite="infinite" style="top: 150px;" :height="'100%'"  noDataText="">
+
           <panel header="查询结果"  :list="kbList" :type="panelType" @on-img-error="onImgError" @on-click-item="queryKbView"></panel>
+
     </scroller>
 
 
@@ -123,7 +125,7 @@
       },
       //search 处理
       onSubmit () {
-        console.log(this);
+//        console.log(this);
         this.$refs.search.setBlur()
         let speciesId=''
         if(this.szVal.length==0)
@@ -136,13 +138,13 @@
         this.$refs.search.setFocus()
       },
       onFocus () {
-        console.log('on focus')
+//        console.log('on focus')
       },
       onCancel () {
-        console.log('on cancel')
+//        console.log('on cancel')
       },
       onImgError (item, $event) {
-        console.log(item, $event)
+//        console.log(item, $event)
       }
 
     },

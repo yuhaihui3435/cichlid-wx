@@ -1,13 +1,16 @@
 <template>
-  <div>
+  <div >
     <x-header :left-options="{showBack: false}"  :right-options="{showMore: true}" @on-click-more="showMenus = true" style="width: 100%; position: absolute; left: 0px; top: 0px; z-index: 100;">杂七杂八</x-header>
-
-    <scroller ref="artList_scroller"
-              :on-refresh="refresh"
-              :on-infinite="infinite" style="padding-top: 44px;" :height="'90%'" noDataText="">
+    <div style="padding-top: 46px;width: 100%;">
       <group>
         <popup-picker title="选择分类" :data="artCatalogList" :columns="1" v-model="artCatalogVal" ref="artPicker" show-name @on-change="artCatalog_onChange"></popup-picker>
       </group>
+
+    </div>
+    <scroller ref="artList_scroller"
+              :on-refresh="refresh"
+              :on-infinite="infinite" style="top: 105px;" :height="'100%'" noDataText="">
+
       <panel header="查询结果"  :list="artList" :type="panelType" @on-img-error="onImgError" @on-click-item="queryArtView"></panel>
     </scroller>
 
@@ -37,7 +40,7 @@
     },
     activated:function () {
       let csp= this.$store.state.art.currScrollerPosition;
-      console.info(csp)
+//      console.info(csp)
       if(csp.length!=0){
 
         setTimeout(() => {
@@ -49,7 +52,7 @@
     deactivated:function () {
       let currScrollerPosition=this.$refs.artList_scroller.getPosition();//获取当前下拉的位置[]
       this.$store.dispatch('SET_ART_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
-      console.info(currScrollerPosition);
+//      console.info(currScrollerPosition);
     },
     methods: {
       artCatalog_onChange(val){

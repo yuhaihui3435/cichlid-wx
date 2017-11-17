@@ -59,7 +59,7 @@ export default {
   })},
   methods:{
     tabbarItemClickHandler(path){
-      console.info(this.$store)
+//      console.info(this.$store)
 
     },
 
@@ -87,6 +87,7 @@ html, body {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 .router-view {
   width: 100%;
