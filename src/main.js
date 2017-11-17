@@ -57,7 +57,7 @@ Vue.prototype.SDKRegister = (that, callback) => {
     }
   })
   that.$wechat.ready((res) => {
-    that.$wechat.showAllNonBaseMenuItem()
+    //that.$wechat.hideAllNonBaseMenuItem()
     // 分享到朋友圈
     let link = shareUrl
     let title = ''
