@@ -41,7 +41,7 @@
       this.$wechat.ready(() => {
         this.$wechat.onMenuShareTimeline({
           title: '慈鲷CC-杂七杂八的文章',
-          link: encodeURIComponent(window.location.href),
+          link: window.location.href,
           imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
           success () {
             // 用户确认分享后执行的回调函数
@@ -53,7 +53,7 @@
         // 分享给朋友
         this.$wechat.onMenuShareAppMessage({
           title: '慈鲷CC-杂七杂八的文章',
-          link: encodeURIComponent(window.location.href),
+          link: window.location.href,
           imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
           desc:'贼LOW的英语水平，翻译的关于慈鲷的英文文章。',
           success: function () {
