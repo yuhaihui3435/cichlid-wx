@@ -56,7 +56,7 @@ Vue.prototype.SDKRegister = (that, callback) => {
       })
     }
   })
-  that.$wechat.ready((res) => {
+  that.$wechat.ready(() => {
     // console.log("执行了ready:"+res);
     // //that.$wechat.hideAllNonBaseMenuItem()
     // // 分享到朋友圈
@@ -75,6 +75,9 @@ Vue.prototype.SDKRegister = (that, callback) => {
       desc:that.$store.state.shareDesc,
       success () {
         // 用户确认分享后执行的回调函数
+        alert(title+"="+link+"="+imgUrl+"="+desc);
+
+
 
       },
       cancel () {
