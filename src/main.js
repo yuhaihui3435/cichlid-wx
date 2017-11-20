@@ -70,12 +70,11 @@ Vue.prototype.SDKRegister = (that, callback) => {
 
     that.$wechat.onMenuShareTimeline({
       title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
-      link: (that.$store.state.shareUrl=='')?'www.cichlid.cc/index.html#/':that.$store.state.shareUrl, // 分享链接
+      link: (window.location.href=='')?'www.cichlid.cc/index.html#/':window.location.href, // 分享链接
       imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
-      desc:that.$store.state.shareDesc,
       success () {
         // 用户确认分享后执行的回调函数
-        alert(title+"="+link+"="+imgUrl+"="+desc);
+
 
 
 
@@ -87,12 +86,12 @@ Vue.prototype.SDKRegister = (that, callback) => {
     // 分享给朋友
     that.$wechat.onMenuShareAppMessage({
       title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
-      link: (that.$store.state.shareUrl=='')?'www.cichlid.cc/index.html#/':that.$store.state.shareUrl, // 分享链接
+      link: (window.location.href=='')?'www.cichlid.cc/index.html#/':window.location.href, // 分享链接
       imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
       desc:that.$store.state.shareDesc,
       success: function () {
         // 用户确认分享后执行的回调函数
-        alert(title+"="+link+"="+imgUrl+"="+desc);
+
       },
       cancel: function () {
         // 用户取消分享后执行的回调函数
