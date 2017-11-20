@@ -52,7 +52,7 @@
 
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_SZ_LIST');
-      this.$store.dispatch('SET_SHAREINFO',{shareUrl:this.$route.path,shareTitle:window.document.title,shareImg:'',shareDesc:'慈鲷知识库查询'})
+      this.$store.dispatch('SET_SHAREINFO',{shareTitle:'慈鲷CC-知识库',shareImg:'',shareDesc:'丰富的慈鲷鱼资料库'})
 
     },
     activated:function () {

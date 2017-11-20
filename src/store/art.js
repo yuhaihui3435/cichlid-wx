@@ -9,6 +9,8 @@ export default{
     art_view_headerTitle:'',
     art_view_detail:'',
     currScrollerPosition:[],
+    art_view_detail_thumbnail:'',
+    art_view:''
   },
   actions: {
     LOAD_ART_LIST: function ({ commit,state },param) {
@@ -49,10 +51,11 @@ export default{
         res.then((response)=>{
           if(response.status==200){
             commit('LOAD_ART_VIEW', { list: response.data })
+            resolve();
           }
         })
 
-        resolve();
+
       });
 
     },
@@ -119,10 +122,11 @@ export default{
     },
     LOAD_ART_VIEW: (state, { list }) => {
 
-
+      state.art_view=list
+      state.art_view_detail_thumbnail=qiniu_url+list.thumbnail
       state.art_view_headerTitle=list.title;
       state.art_view_detail=list.text;
-      state.data_loading=false;
+      // state.data_loading=false;
     },
     SET_ARTCATALOG_LIST: (state,{list}) =>{
       state.artCatalogList=[]
@@ -133,7 +137,7 @@ export default{
         ac={name:obj.title,value:obj.id.toString(),parent:0}
         state.artCatalogList.push(ac)
       }
-      state.data_loading=false;
+      // state.data_loading=false;
     },
     SET_ART_CURRSCROLLERPOSITION:(state,param)=>{
       state.currScrollerPosition=param

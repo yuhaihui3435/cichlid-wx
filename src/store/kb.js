@@ -17,6 +17,7 @@ export default{
     currScrollerPosition:[],
     kb_view_id:'',
     kb_view_detail_thumbnail:'',
+    kb_data:''
   },
   actions: {
     LOAD_KB_LIST: function ({ commit,state },param) {
@@ -208,11 +209,11 @@ export default{
       //state.data_loading=false;
     },
     LOAD_KB_VIEW: (state, { list }) => {
-
+      state.kb_data=list
       state.kb_view_baseInfo_list=[];
       state.kb_view_headerTitle=list.scName;
       state.kb_view_detail=list.remark;
-      state.kb_view_detail_thumbnail=list.thumbnail;
+      state.kb_view_detail_thumbnail=qiniu_url+list.thumbnail;
       if(list.scName!='')
         state.kb_view_baseInfo_list.push({'label':'学名','value':list.scName})
       if(list.enName!='')

@@ -37,6 +37,7 @@
       this.$store.dispatch('SET_TABBARSHOW',true)
       //this.$refs.artList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_ARTCATALOG_LIST')
+      this.$store.dispatch('SET_SHAREINFO',{shareTitle:'慈鲷CC-杂七杂八的文章',shareImg:'',shareDesc:'有一些关于慈鲷的英文文章，必须要说翻译的很烂，看的时候小心'})
     },
     activated:function () {
       let csp= this.$store.state.art.currScrollerPosition;

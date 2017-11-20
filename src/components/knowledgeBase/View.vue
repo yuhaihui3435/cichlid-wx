@@ -86,7 +86,7 @@
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('RESET_KB_VIEW_IMGS_PARAMS')
       this.$store.dispatch('LOAD_KB_VIEW',{id:id}).then(()=>{
-        this.$store.dispatch('SET_SHAREINFO',{shareUrl:this.$route.path,shareTitle:this.$store.state.kb.kb_view_headerTitle,shareImg:this.$store.state.kb.kb_view_detail_thumbnail,shareDesc:''})
+        this.$store.dispatch('SET_SHAREINFO',{shareTitle:this.$store.state.kb.kb_view_headerTitle,shareImg:this.$store.state.kb.kb_view_detail_thumbnail,shareDesc:this.$store.state.kb.kb_data.zhName})
       })
 
     },
