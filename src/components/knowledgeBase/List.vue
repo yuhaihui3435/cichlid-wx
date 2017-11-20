@@ -49,14 +49,16 @@
             })
     } ,
     mounted: function () {
-//      alert(window.location.href)
+
+      let shareUrl=window.location.href.split('#');
+      shareUrl=shareUrl[0]+'?#'+shareUrl[1];
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_SZ_LIST');
       //微信分享代码
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: '慈鲷CC-知识库',
-            link: window.location.href,
+            link: shareUrl,
             imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             success () {
               // 用户确认分享后执行的回调函数
@@ -68,7 +70,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title: '慈鲷CC-知识库',
-            link:window.location.href,
+            link:shareUrl,
             imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:'逐渐丰富的非洲慈鲷鱼资料仓库',
             success: function () {
@@ -84,7 +86,6 @@
     },
     activated:function () {
       let csp= this.$store.state.kb.currScrollerPosition;
-//      console.info(csp)
       if(csp.length!=0){
 
           setTimeout(() => {

@@ -86,12 +86,15 @@
       let id=this.id
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('RESET_KB_VIEW_IMGS_PARAMS')
+
+      let shareUrl=window.location.href.split('#');
+      shareUrl=shareUrl[0]+'?#'+shareUrl[1];
       this.$store.dispatch('LOAD_KB_VIEW',{id:id}).then(()=>{
         //微信分享代码
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: this.$store.state.kb.kb_view_headerTitle,
-            link:window.location.href,
+            link:shareUrl,
             imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:(this.$store.state.kb.kb_data.zhName)?this.$store.state.kb.kb_data.zhName:'',
             success () {
@@ -104,7 +107,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title: this.$store.state.kb.kb_view_headerTitle,
-            link: window.location.href,
+            link: shareUrl,
             imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:(this.$store.state.kb.kb_data.zhName)?this.$store.state.kb.kb_data.zhName:'',
             success: function () {
