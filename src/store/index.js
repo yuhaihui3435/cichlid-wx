@@ -27,6 +27,10 @@ const store = new Vuex.Store({
     tabbarShow:false,
     previewImg:'',
     isPreview:false,
+    shareUrl:'',
+    shareTitle:'',
+    shareImg:'',
+    shareDesc:''
   },
   actions: {
 
@@ -51,6 +55,12 @@ const store = new Vuex.Store({
     //     })
     //   })
     // },
+    SET_SHAREINFO:({commit,state},param)=>{
+      state.shareUrl=param.shareUrl
+      state.shareDesc=param.shareDesc
+      state.shareImg=param.shareImg
+      state.shareTitle=param.shareTitle
+    }
   },
 
 
@@ -72,6 +82,7 @@ const store = new Vuex.Store({
     //   state.APPID=data.APPID;
     //   state.APPSECRET=data.APPSECRET;
     // }
+
   }
 })
 export default store

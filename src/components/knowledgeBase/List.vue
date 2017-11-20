@@ -52,6 +52,7 @@
 
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_SZ_LIST');
+      this.$store.dispatch('SET_SHAREINFO',{shareUrl:this.$route.path,shareTitle:window.document.title,shareImg:'',shareDesc:'慈鲷知识库查询'})
 
     },
     activated:function () {
@@ -71,7 +72,7 @@
 //      console.info(currScrollerPosition);
     },
     beforeCreate (){
-      console.log(this.$store.state.urlPrefix)
+//      console.log(this.$store.state.urlPrefix)
       this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
       this.SDKRegister(this, () => {})
     },

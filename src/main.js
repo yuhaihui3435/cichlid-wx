@@ -57,12 +57,16 @@ Vue.prototype.SDKRegister = (that, callback) => {
     }
   })
   that.$wechat.ready((res) => {
+    console.log(res);
     //that.$wechat.hideAllNonBaseMenuItem()
     // 分享到朋友圈
-    let link = shareUrl
-    let title = ''
-    let imgUrl = ''
-    let desc = ''
+    let link = that.$store.state.shareUrl
+    link=(link=='')?'www.cichlid.cc/index.html#/':link
+    let title = that.$store.state.shareTitle
+    title=(title=='')?'慈鲷CC':title
+    let imgUrl = that.$store.state.shareImg
+    imgUrl=(imgUrl=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':imgUrl
+    let desc = that.$store.state.shareDesc
 
     that.$wechat.onMenuShareTimeline({
       title: title, // 分享标题
@@ -70,7 +74,7 @@ Vue.prototype.SDKRegister = (that, callback) => {
       imgUrl: imgUrl, // 分享图标
       success () {
         // 用户确认分享后执行的回调函数
-        that.$alert('分享成功', 'success')
+
       },
       cancel () {
         // 用户取消分享后执行的回调函数
@@ -84,7 +88,7 @@ Vue.prototype.SDKRegister = (that, callback) => {
       imgUrl: imgUrl, // 分享图标
       success: function () {
         // 用户确认分享后执行的回调函数
-        that.$alert('分享成功', 'success')
+
       },
       cancel: function () {
         // 用户取消分享后执行的回调函数
