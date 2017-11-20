@@ -24,7 +24,40 @@
       let id=this.id
       this.$store.dispatch('LOAD_ART_VIEW',{id:id}).then(()=>{
         this.$store.dispatch('SET_SHAREINFO',{shareTitle:this.$store.state.art.art_view_headerTitle,shareImg:this.$store.state.art.art_view_detail_thumbnail,shareDesc:this.$store.state.art.art_view.summary})
+        //微信分享代码
+        this.$wechat.ready(() => {
+          this.$wechat.onMenuShareTimeline({
+            title: this.$store.state.art.art_view_headerTitle,
+            link: window.location.href,
+            imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            success () {
+              // 用户确认分享后执行的回调函数
+            },
+            cancel () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+          // 分享给朋友
+          this.$wechat.onMenuShareAppMessage({
+            title:this.$store.state.art.art_view_headerTitle,
+            link: window.location.href,
+            imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:this.$store.state.art.art_view.summary,
+            success: function () {
+
+            },
+            cancel: function () {
+
+            }
+          })
+        })
+
       })
+    },
+    beforeCreate (){
+      //微信JSSKD初始化
+      this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
+      this.SDKRegister(this, () => {})
     },
     methods: {
 

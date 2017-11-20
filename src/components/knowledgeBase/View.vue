@@ -86,12 +86,38 @@
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('RESET_KB_VIEW_IMGS_PARAMS')
       this.$store.dispatch('LOAD_KB_VIEW',{id:id}).then(()=>{
-        this.$store.dispatch('SET_SHAREINFO',{shareTitle:this.$store.state.kb.kb_view_headerTitle,shareImg:this.$store.state.kb.kb_view_detail_thumbnail,shareDesc:this.$store.state.kb.kb_data.zhName})
+        //微信分享代码
+        this.$wechat.ready(() => {
+          this.$wechat.onMenuShareTimeline({
+            title: this.$store.state.kb.kb_view_headerTitle,
+            link: window.location.href,
+            imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            success () {
+              // 用户确认分享后执行的回调函数
+            },
+            cancel () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+          // 分享给朋友
+          this.$wechat.onMenuShareAppMessage({
+            title: this.$store.state.kb.kb_view_headerTitle,
+            link: window.location.href,
+            imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:(this.$store.state.kb.kb_data.zhName)?this.$store.state.kb.kb_data.zhName:'',
+            success: function () {
+
+            },
+            cancel: function () {
+
+            }
+          })
+        })
       })
 
     },
     beforeCreate (){
-//      console.log(this.$store.state.urlPrefix)
+      //微信JSSKD初始化
       this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
       this.SDKRegister(this, () => {})
     },

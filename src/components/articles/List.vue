@@ -37,7 +37,38 @@
       this.$store.dispatch('SET_TABBARSHOW',true)
       //this.$refs.artList_scroller.triggerPullToRefresh();
       this.$store.dispatch('LOAD_ARTCATALOG_LIST')
-      this.$store.dispatch('SET_SHAREINFO',{shareTitle:'慈鲷CC-杂七杂八的文章',shareImg:'',shareDesc:'有一些关于慈鲷的英文文章，必须要说翻译的很烂，看的时候小心'})
+      //微信分享代码
+      this.$wechat.ready(() => {
+        this.$wechat.onMenuShareTimeline({
+          title: '慈鲷CC-杂七杂八的文章',
+          link: window.location.href,
+          imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+          success () {
+            // 用户确认分享后执行的回调函数
+          },
+          cancel () {
+            // 用户取消分享后执行的回调函数
+          }
+        })
+        // 分享给朋友
+        this.$wechat.onMenuShareAppMessage({
+          title: '慈鲷CC-杂七杂八的文章',
+          link: window.location.href,
+          imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+          desc:'贼LOW的英语水平，翻译的关于慈鲷的英文文章。',
+          success: function () {
+
+          },
+          cancel: function () {
+
+          }
+        })
+      })
+    },
+    beforeCreate (){
+      //微信JSSKD初始化
+      this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
+      this.SDKRegister(this, () => {})
     },
     activated:function () {
       let csp= this.$store.state.art.currScrollerPosition;

@@ -56,10 +56,16 @@ const store = new Vuex.Store({
     //   })
     // },
     SET_SHAREINFO:({commit,state},param)=>{
-      state.shareUrl=param.shareUrl
-      state.shareDesc=param.shareDesc
-      state.shareImg=param.shareImg
-      state.shareTitle=param.shareTitle
+
+      return new Promise((resolve, reject)=>{
+        state.shareUrl=param.shareUrl
+        state.shareDesc=param.shareDesc
+        state.shareImg=param.shareImg
+        state.shareTitle=param.shareTitle
+
+        resolve();
+      })
+
     }
   },
 

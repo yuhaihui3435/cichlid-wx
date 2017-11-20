@@ -52,7 +52,34 @@
 
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_SZ_LIST');
-      this.$store.dispatch('SET_SHAREINFO',{shareTitle:'慈鲷CC-知识库',shareImg:'',shareDesc:'丰富的慈鲷鱼资料库'})
+      //微信分享代码
+        this.$wechat.ready(() => {
+          this.$wechat.onMenuShareTimeline({
+            title: '慈鲷CC-知识库',
+            link: window.location.href,
+            imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            success () {
+              // 用户确认分享后执行的回调函数
+            },
+            cancel () {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+          // 分享给朋友
+          this.$wechat.onMenuShareAppMessage({
+            title: '慈鲷CC-知识库',
+            link: window.location.href,
+            imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:'逐渐丰富的非洲慈鲷鱼资料仓库',
+            success: function () {
+
+            },
+            cancel: function () {
+
+            }
+          })
+        })
+
 
     },
     activated:function () {
@@ -69,10 +96,9 @@
     deactivated:function () {
       let currScrollerPosition=this.$refs.kbList_scroller.getPosition();//获取当前下拉的位置[]
       this.$store.dispatch('SET_KB_CURRSCROLLERPOSITION',currScrollerPosition);//设置当前滚动条的位置
-//      console.info(currScrollerPosition);
     },
     beforeCreate (){
-//      console.log(this.$store.state.urlPrefix)
+      //微信JSSKD初始化
       this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
       this.SDKRegister(this, () => {})
     },

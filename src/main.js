@@ -56,56 +56,11 @@ Vue.prototype.SDKRegister = (that, callback) => {
       })
     }
   })
-  that.$wechat.ready(() => {
-    // console.log("执行了ready:"+res);
-    // //that.$wechat.hideAllNonBaseMenuItem()
-    // // 分享到朋友圈
-    // let link = that.$store.state.shareUrl
-    // link=(link=='')?'www.cichlid.cc/index.html#/':link
-    // let title = that.$store.state.shareTitle
-    // title=(title=='')?'慈鲷CC':title
-    // let imgUrl = that.$store.state.shareImg
-    // imgUrl=(imgUrl=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':imgUrl
-    // let desc = that.$store.state.shareDesc
 
-    that.$wechat.onMenuShareTimeline({
-      title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
-      link: (window.location.href=='')?'www.cichlid.cc/index.html#/':window.location.href, // 分享链接
-      imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
-      success () {
-        // 用户确认分享后执行的回调函数
-
-
-
-
-      },
-      cancel () {
-        // 用户取消分享后执行的回调函数
-      }
-    })
-    // 分享给朋友
-    that.$wechat.onMenuShareAppMessage({
-      title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
-      link: (window.location.href=='')?'www.cichlid.cc/index.html#/':window.location.href, // 分享链接
-      imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
-      desc:that.$store.state.shareDesc,
-      success: function () {
-        // 用户确认分享后执行的回调函数
-
-      },
-      cancel: function () {
-        // 用户取消分享后执行的回调函数
-      }
-    })
-    // 如果需要定制ready回调方法
-    if(callback){
-      callback.call(that)
-    }
-  })
 }
 
 router.beforeEach((to, from, next) => {
-
+  console.log(this)
   /* 路由发生变化修改页面title */
   if (to.meta.title) {
     //document.title = document.title+'-'+to.meta.title;
