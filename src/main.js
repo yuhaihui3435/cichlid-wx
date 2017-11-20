@@ -57,22 +57,22 @@ Vue.prototype.SDKRegister = (that, callback) => {
     }
   })
   that.$wechat.ready((res) => {
-    console.log(res);
-    //that.$wechat.hideAllNonBaseMenuItem()
-    // 分享到朋友圈
-    let link = that.$store.state.shareUrl
-    link=(link=='')?'www.cichlid.cc/index.html#/':link
-    let title = that.$store.state.shareTitle
-    title=(title=='')?'慈鲷CC':title
-    let imgUrl = that.$store.state.shareImg
-    imgUrl=(imgUrl=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':imgUrl
-    let desc = that.$store.state.shareDesc
+    // console.log("执行了ready:"+res);
+    // //that.$wechat.hideAllNonBaseMenuItem()
+    // // 分享到朋友圈
+    // let link = that.$store.state.shareUrl
+    // link=(link=='')?'www.cichlid.cc/index.html#/':link
+    // let title = that.$store.state.shareTitle
+    // title=(title=='')?'慈鲷CC':title
+    // let imgUrl = that.$store.state.shareImg
+    // imgUrl=(imgUrl=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':imgUrl
+    // let desc = that.$store.state.shareDesc
 
     that.$wechat.onMenuShareTimeline({
-      title: title, // 分享标题
-      link: link, // 分享链接
-      imgUrl: imgUrl, // 分享图标，
-      desc:desc,
+      title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
+      link: (that.$store.state.shareUrl=='')?'www.cichlid.cc/index.html#/':that.$store.state.shareUrl, // 分享链接
+      imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
+      desc:that.$store.state.shareDesc,
       success () {
         // 用户确认分享后执行的回调函数
 
@@ -83,10 +83,10 @@ Vue.prototype.SDKRegister = (that, callback) => {
     })
     // 分享给朋友
     that.$wechat.onMenuShareAppMessage({
-      title: title, // 分享标题
-      desc: desc, // 分享描述
-      link: link, // 分享链接
-      imgUrl: imgUrl, // 分享图标
+      title: (that.$store.state.shareTitle=='')?'慈鲷CC':that.$store.state.shareTitle, // 分享标题
+      link: (that.$store.state.shareUrl=='')?'www.cichlid.cc/index.html#/':that.$store.state.shareUrl, // 分享链接
+      imgUrl: (that.$store.state.shareImg=='')?'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png':that.$store.state.shareImg, // 分享图标，
+      desc:that.$store.state.shareDesc,
       success: function () {
         // 用户确认分享后执行的回调函数
 
