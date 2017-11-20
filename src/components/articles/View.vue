@@ -28,8 +28,9 @@
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: this.$store.state.art.art_view_headerTitle,
-            link: window.location.href,
+            link: encodeURIComponent(window.location.href),
             imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:this.$store.state.art.art_view.summary,
             success () {
               // 用户确认分享后执行的回调函数
             },
@@ -40,7 +41,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title:this.$store.state.art.art_view_headerTitle,
-            link: window.location.href,
+            link: encodeURIComponent(window.location.href),
             imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:this.$store.state.art.art_view.summary,
             success: function () {
