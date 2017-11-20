@@ -20,6 +20,8 @@
       'art_view_detail':state=>state.art.art_view_detail
     })},
     mounted: function () {
+      let shareUrl=window.location.href.split('#');
+      shareUrl=shareUrl[0]+'?#'+shareUrl[1];
       this.$store.dispatch('SET_TABBARSHOW',true)
       let id=this.id
       this.$store.dispatch('LOAD_ART_VIEW',{id:id}).then(()=>{
@@ -28,7 +30,7 @@
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: this.$store.state.art.art_view_headerTitle,
-            link: window.location.href,
+            link: shareUrl,
             imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:this.$store.state.art.art_view.summary,
             success () {
@@ -41,7 +43,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title:this.$store.state.art.art_view_headerTitle,
-            link: window.location.href,
+            link: shareUrl,
             imgUrl: (this.$store.state.art.art_view_detail_thumbnail)?this.$store.state.art.art_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:this.$store.state.art.art_view.summary,
             success: function () {
