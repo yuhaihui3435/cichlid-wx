@@ -51,15 +51,17 @@ export default{
 
     },
     LOAD_KB_VIEW: function ({ commit,state },param) {
-      state.data_loading=true;
+      //state.data_loading=true;
       return new Promise((resolve, reject)=>{
         let res=HTTP.post(this.state.urlPrefix+'/wc/queryKbView',param)
         res.then((response)=>{
           if(response&&response.status==200)
           commit('LOAD_KB_VIEW', { list: response.data })
+
+          resolve();
         })
 
-        resolve();
+
       });
 
     },
