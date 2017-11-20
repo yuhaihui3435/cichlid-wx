@@ -82,7 +82,7 @@
       'kb_view_imgs':state=>state.kb.kbViewImgs,
         })},
     mounted: function () {
-      alert(window.location.href)
+//      alert(window.location.href)
       let id=this.id
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('RESET_KB_VIEW_IMGS_PARAMS')

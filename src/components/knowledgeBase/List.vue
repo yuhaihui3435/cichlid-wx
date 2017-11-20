@@ -49,7 +49,7 @@
             })
     } ,
     mounted: function () {
-      alert(window.location.href)
+//      alert(window.location.href)
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('LOAD_SZ_LIST');
       //微信分享代码

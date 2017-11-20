@@ -18,7 +18,7 @@
 
     },
     mounted: function () {
-
+      alert(window.location.href)
       this.$store.dispatch('SET_TABBARSHOW',false)
       let query=this.$route.query;
 //      console.info("query="+query);
