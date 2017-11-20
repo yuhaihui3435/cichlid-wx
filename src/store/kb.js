@@ -15,8 +15,8 @@ export default{
     kb_view_detail:'',
     kb_photoWall:'',
     currScrollerPosition:[],
-    kb_view_id:''
-
+    kb_view_id:'',
+    kb_view_detail_thumbnail:'',
   },
   actions: {
     LOAD_KB_LIST: function ({ commit,state },param) {
@@ -210,6 +210,7 @@ export default{
       state.kb_view_baseInfo_list=[];
       state.kb_view_headerTitle=list.scName;
       state.kb_view_detail=list.remark;
+      state.kb_view_detail_thumbnail=list.thumbnail;
       if(list.scName!='')
         state.kb_view_baseInfo_list.push({'label':'学名','value':list.scName})
       if(list.enName!='')

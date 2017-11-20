@@ -86,11 +86,15 @@
       this.$store.dispatch('SET_TABBARSHOW',true)
       this.$store.dispatch('RESET_KB_VIEW_IMGS_PARAMS')
       this.$store.dispatch('LOAD_KB_VIEW',{id:id}).then(()=>{
-        //this.$router.push('kbView')
+        this.$store.dispatch('SET_SHAREINFO',{shareUrl:this.$route.path,shareTitle:this.$store.state.kb.kb_view_headerTitle,shareImg:this.$store.state.kb.kb_view_detail_thumbnail,shareDesc:''})
       })
 
     },
-
+    beforeCreate (){
+//      console.log(this.$store.state.urlPrefix)
+      this.webUrl=this.$store.state.urlPrefix + '/wc/queryWXAPPINFO';
+      this.SDKRegister(this, () => {})
+    },
     methods: {
       refresh(){
         this.$store.dispatch('LOAD_KB_VIEW_IMGS',{module:'kb','moduleId':this.kb_id}).then(()=>{

@@ -71,7 +71,8 @@ Vue.prototype.SDKRegister = (that, callback) => {
     that.$wechat.onMenuShareTimeline({
       title: title, // 分享标题
       link: link, // 分享链接
-      imgUrl: imgUrl, // 分享图标
+      imgUrl: imgUrl, // 分享图标，
+      desc:desc,
       success () {
         // 用户确认分享后执行的回调函数
 
