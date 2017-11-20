@@ -33,7 +33,7 @@ Vue.prototype.SDKRegister = (that, callback) => {
   // 接入微信JSSDK
   // 获取微信JSSDK配置
   let url = that.webUrl
-  let shareUrl=window.location.href;
+  let shareUrl=window.location.href.split('#')[0]
   HTTP.post(url,{shareUrl:shareUrl}).then(response => {
     if(response&&response.status==200) {
       let res = response.data
