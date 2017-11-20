@@ -56,7 +56,7 @@
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: '慈鲷CC-知识库',
-            link: window.location.href,
+            link: encodeURIComponent(window.location.href),
             imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             success () {
               // 用户确认分享后执行的回调函数
@@ -68,7 +68,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title: '慈鲷CC-知识库',
-            link: window.location.href,
+            link:encodeURIComponent(window.location.href),
             imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:'逐渐丰富的非洲慈鲷鱼资料仓库',
             success: function () {
