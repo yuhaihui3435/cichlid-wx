@@ -53,6 +53,30 @@
 
             }
           })
+          this.$wechat.onMenuShareQQ({
+            title: '慈鲷CC-知识库',
+            link:shareUrl,
+            imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:'逐渐丰富的非洲慈鲷鱼资料仓库',
+            success: function () {
+
+            },
+            cancel: function () {
+
+            }
+          })
+          this.$wechat.onMenuShareQZone({
+            title: '慈鲷CC-知识库',
+            link:shareUrl,
+            imgUrl: 'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
+            desc:'逐渐丰富的非洲慈鲷鱼资料仓库',
+            success: function () {
+
+            },
+            cancel: function () {
+
+            }
+          })
         })
 
       })
