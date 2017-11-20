@@ -91,7 +91,7 @@
         this.$wechat.ready(() => {
           this.$wechat.onMenuShareTimeline({
             title: this.$store.state.kb.kb_view_headerTitle,
-            link: encodeURIComponent(window.location.href+'?&'),
+            link: encodeURIComponent(window.location.href),
             imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:(this.$store.state.kb.kb_data.zhName)?this.$store.state.kb.kb_data.zhName:'',
             success () {
@@ -104,7 +104,7 @@
           // 分享给朋友
           this.$wechat.onMenuShareAppMessage({
             title: this.$store.state.kb.kb_view_headerTitle,
-            link: encodeURIComponent(window.location.href+'?&'),
+            link: encodeURIComponent(window.location.href),
             imgUrl: (this.$store.state.kb.kb_view_detail_thumbnail)?this.$store.state.kb.kb_view_detail_thumbnail:'http://images.cichlid.cc/images/sys/app-icon72x72@2x.png',
             desc:(this.$store.state.kb.kb_data.zhName)?this.$store.state.kb.kb_data.zhName:'',
             success: function () {
